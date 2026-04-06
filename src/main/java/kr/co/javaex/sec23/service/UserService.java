@@ -9,36 +9,52 @@ public class UserService {
     private UserRepository userRepository = new UserRepository();
 
     /**
-     * 회원가입 로직
-     * 중복된 아이디나 이미 등록된 메일을 확인
-     * 비밀번호 유효성 확인
-     *
-     * @param newUser
-     * @return 모든통과시 true
+     * ID 유효성 검사
+     * 정규식 만족 + 중복 X
      */
-    public boolean registerUser(User newUser) {
-        // 레파지토리에서 꺼내오기
+    public boolean isPossibleID(String id){
         List<User> allUsers = userRepository.findAll();
 
-        // 중복 검사
+        // 정규식
+        if (!validateID(id)) return false;
+
+        // 중복
         for (User user : allUsers) {
-            if (user.getUserID().equals(newUser.getUserID())) {
-                System.out.println("중복된 아이디가 존재합니다.");
-                return false;
-            }
-            if (user.getUserEmail().equals(newUser.getUserEmail())) {
-                System.out.println("이미 등록된 이메일입니다.");
+            if (user.getUserID().equals(id)) {
                 return false;
             }
         }
+        return true;
+    }
 
-        // 비밀번호 유효성 검사
-        if (!validatePassword(newUser.getUserPW())) {
-            System.out.println("비밀번호 형식이 올바르지 않습니다.");
+    /**
+     * 비밀번호 유효성 검사
+     * 정규식 만족하는가?
+     */
+    public boolean isPossiblePw(String pw){
+        if (!validatePassword(pw)) {
             return false;
         }
+        return true;
+    }
 
-        // 모든 통과 시 저장 요청
+    /**
+     * 이메일 중복 여부
+     */
+    public boolean isPossibleEmail(String email){
+        List<User> allUsers = userRepository.findAll();
+        for (User user : allUsers) {
+            if (user.getUserEmail().equals(email)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 사용자 등록
+     */
+    public boolean registerUser(User newUser) {
         userRepository.save(newUser);
         return true;
     }
@@ -46,9 +62,6 @@ public class UserService {
     /**
      * 로그인 로직
      * 이메일과 비밀번호가 일치하는지 확인한다.
-     * @param email
-     * @param password
-     * @return 일치시 user 객체 없을 시 null
      */
     public User login(String email, String password) {
         List<User> allUsers = userRepository.findAll();
@@ -86,12 +99,43 @@ public class UserService {
     }
 
     /**
-     * 비밀번호 유효성 검사 메서드
-     * @param pw
-     * @return 정규식에 일치하는가?
+     * 비밀번호 정규식 검사 메서드
      */
     private boolean validatePassword(String pw) {
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{5,15}$";
         return pw.matches(regex);
+    }
+
+    /**
+     * ID 정규식 검사 메서드
+     */
+    private boolean validateID(String id){
+        String regex = "^[a-zA-Z0-9]{5,15}$";
+        return id.matches(regex);
+    }
+
+    /**
+     * 현재 비밀번호 확인
+     */
+    public boolean checkCurrentPassword(User currentUser, String inputPw) {
+        // 현재 로그인한 객체의 비밀번호와 방금 입력한 비밀번호가 같은지 비교
+        return currentUser.getUserPW().equals(inputPw);
+    }
+
+    /**
+     * t새로운 비밀번호로 덮어쓰고 저장
+     */
+    public void updatePassword(String userId, String newPw) {
+        List<User> allUsers = userRepository.findAll();
+
+        for (User user : allUsers) {
+            // id 동일한지 확인하고
+            if (user.getUserID().equals(userId)) {
+                user.setUserPW(newPw); // 새 비밀번호로 교체
+                break;
+            }
+        }
+        // 수정된 리스트 파일에 다시 저장
+        userRepository.saveAll(allUsers);
     }
 }

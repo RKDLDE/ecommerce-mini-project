@@ -1,6 +1,8 @@
 package kr.co.javaex.sec23.controller;
 
 import kr.co.javaex.sec23.domain.User;
+import kr.co.javaex.sec23.domain.UserAuth;
+import kr.co.javaex.sec23.domain.UserStatus;
 import kr.co.javaex.sec23.service.UserService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
@@ -11,11 +13,13 @@ public class UserController {
     private ConsoleUtil consoleUtil = new ConsoleUtil();
     // 로그인
     public User login() {
+        System.out.println("\n=========== 로그인 ===========");
         String email = consoleUtil.readString("이메일 입력: ");
         String pw = consoleUtil.readString("비밀번호 입력: ");
 
         User loginUser = userService.login(email, pw);
 
+        // 돌아온 객체가 있으면 그대로 menu로 보내기
         if (loginUser != null){
             System.out.println("로그인 성공");
             return loginUser;
@@ -27,11 +31,93 @@ public class UserController {
 
     // 회원 가입
     public void signUp() {
+        System.out.println("\n=========== 회원가입 ===========");
+        String name = consoleUtil.readString("이름 입력: ");
+        String phone = consoleUtil.readString("전화번호 입력: ");
 
+        String email;
+        while(true){
+            email = consoleUtil.readString("이메일 입력: ");
+            if(userService.isPossibleEmail(email)) {
+                System.out.println("사용 가능한 이메일 입니다.");
+                break;
+            } else {
+                System.out.println("사용 불가능한 이메일 입니다.");
+            }
+        }
+
+        String id;
+        while(true){
+            id = consoleUtil.readString("ID 입력 (5~15자리): ");
+            if(userService.isPossibleID(id)){
+                System.out.println("사용 가능한 ID 입니다.");
+                break;
+            } else {
+                System.out.println("사용 불가능한 ID 입니다.");
+            }
+        }
+
+        String pw;
+        while(true){
+            pw = consoleUtil.readString("비밀번호 입력 (영소/대문자, 숫자 포함 5~15자리): ");
+            if(userService.isPossiblePw(pw)){
+                System.out.println("사용 가능한 비밀번호 입니다.");
+                break;
+            } else {
+                System.out.println("사용 불가능한 비밀번호 입니다.");
+            }
+        }
+
+        User newUser = new User(id, name, pw, phone, email, UserStatus.ENABLE, UserAuth.USER);
+
+        if (userService.registerUser(newUser)) {
+            System.out.println("\n회원가입이 완료되었습니다! 로그인 해주세요.");
+        } else {
+            System.out.println("\n회원가입 처리 중 문제가 발생했습니다.");
+        }
     }
 
     // 정보 수정
-    public void  updateInfo(){
+    public void  updateInfo(User user){
+        System.out.println("\n=========== 내 정보 수정 ===========");
+        String name = consoleUtil.readString("바꿀 이름 입력: ");
+        String phone = consoleUtil.readString("바꿀 전화번호 입력: ");
+        String email;
+        while(true){
+            email = consoleUtil.readString("이메일 입력: ");
+            if(userService.isPossibleEmail(email)) {
+                System.out.println("사용 가능한 이메일 입니다.");
+                break;
+            } else {
+                System.out.println("사용 불가능한 이메일 입니다.");
+            }
+        }
+        userService.updateProfile(user.getUserID(), name, phone, email);
+    }
 
+    public void updatePw(User currentUser) {
+        System.out.println("\n=========== 비밀번호 변경 ===========");
+
+        // 현재 비밀번호 확인
+        String currentPw = consoleUtil.readString("현재 비밀번호 입력: ");
+        if (!userService.checkCurrentPassword(currentUser, currentPw)) {
+            System.out.println("현재 비밀번호가 일치하지 않습니다. 메인 메뉴로 돌아갑니다.");
+            return;
+        }
+
+        // 새 비밀번호 입력 및 유효성 검사
+        String newPw;
+        while (true) {
+            newPw = consoleUtil.readString("새 비밀번호 입력 (영소/대문자, 숫자 포함 5~15자리): ");
+            if (userService.isPossiblePw(newPw)) {
+                break;
+            } else {
+                System.out.println("사용 불가능한 비밀번호 입니다.");
+            }
+        }
+
+        userService.updatePassword(currentUser.getUserID(), newPw);
+        System.out.println("비밀번호가 성공적으로 변경되었습니다.");
+        currentUser.setUserPW(newPw);
     }
 }

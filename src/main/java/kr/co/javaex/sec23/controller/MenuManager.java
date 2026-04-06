@@ -36,13 +36,11 @@ public class MenuManager {
     private void showGuestMenu() {
         System.out.println("\n[ 게스트 메뉴 ]");
         System.out.println("1. 로그인 | 2. 회원가입 | 3. 상품 목록 보기 | 0. 종료");
-
         int choice = consoleUtil.readInt("선택: ");
 
         switch (choice) {
             case 1:
                 currentUser = userController.login();
-
                 break;
             case 2:
                 userController.signUp();
@@ -61,8 +59,7 @@ public class MenuManager {
     // 관리자
     private void showAdminMenu() {
         System.out.println("\n[ 관리자 메뉴 ]");
-        System.out.println("1. 카테고리 관리 | 2. 상품 관리 | 3. 회원 관리 | 9. 로그아웃 | 0. 종료");
-        System.out.print("선택: ");
+        System.out.println("1. 카테고리 관리 | 2. 상품 관리 | 3. 회원 관리 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
         int choice = consoleUtil.readInt("선택: ");
 
         switch (choice) {
@@ -74,6 +71,12 @@ public class MenuManager {
                 break;
             case 3:
                 // 회원관리..
+                break;
+            case 4:
+                userController.updateInfo(currentUser);
+                break;
+            case 5:
+                userController.updatePw(currentUser);
                 break;
             case 9:
                 logout();
@@ -89,8 +92,7 @@ public class MenuManager {
     // 일반 사용자
     private void showUserMenu() {
         System.out.println("\n[ 회원 메뉴 ]");
-        System.out.println("1. 상품 쇼핑 | 2. 장바구니 | 3. 주문 내역 | 4. 내 정보 수정 | 9. 로그아웃 | 0. 종료");
-        System.out.print("선택: ");
+        System.out.println("1. 상품 쇼핑 | 2. 장바구니 | 3. 주문 내역 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
         int choice = consoleUtil.readInt("선택: ");
 
         switch (choice) {
@@ -104,7 +106,10 @@ public class MenuManager {
                 // orderController.showOrderList(currentUser);
                 break;
             case 4:
-                // 내 정보 수정
+                userController.updateInfo(currentUser);
+                break;
+            case 5:
+                userController.updatePw(currentUser);
                 break;
             case 9:
                 logout();
