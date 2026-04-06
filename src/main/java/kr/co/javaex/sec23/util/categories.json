@@ -1,0 +1,32 @@
+[
+  {
+    "categoryID": "C001",
+    "topCategoryID": null,
+    "categoryName": "키보드",
+    "sortOrder": 1
+  },
+  {
+    "categoryID": "C002",
+    "topCategoryID": null,
+    "categoryName": "액세서리",
+    "sortOrder": 2
+  },
+  {
+    "categoryID": "C101",
+    "topCategoryID": "C001",
+    "categoryName": "무접점/기계식",
+    "sortOrder": 1
+  },
+  {
+    "categoryID": "C102",
+    "topCategoryID": "C001",
+    "categoryName": "커스텀/베어본",
+    "sortOrder": 2
+  },
+  {
+    "categoryID": "C201",
+    "topCategoryID": "C002",
+    "categoryName": "키캡/스위치",
+    "sortOrder": 1
+  }
+]

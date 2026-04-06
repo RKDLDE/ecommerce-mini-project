@@ -1,0 +1,47 @@
+[
+  {
+    "productID": "P1001",
+    "categoryID": "C101",
+    "productName": "해피해킹(HHKB) 프로페셔널",
+    "productDescription": "개발자의 영혼을 달래주는 무접점 키보드, 타건감 예술",
+    "productPrice": 380000,
+    "productStock": 10,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": "P1002",
+    "categoryID": "C101",
+    "productName": "키크론 Q1 Pro 풀알루미늄",
+    "productDescription": "맥/윈도우 완벽 호환, 묵직한 노브(Knob) 폼 미쳤다",
+    "productPrice": 240000,
+    "productStock": 25,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": "P1003",
+    "categoryID": "C101",
+    "productName": "도은 커스텀 텐키리스 (도은-87)",
+    "productDescription": "직접 풀윤활한 특주축 탑재, 타건음 ASMR 그 자체",
+    "productPrice": 420000,
+    "productStock": 3,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": "P1004",
+    "categoryID": "C101",
+    "productName": "PIZZA 에디션 65% 베어본",
+    "productDescription": "피자 만들다 빡쳐서(?) 만든 한정판 핫스왑 키보드",
+    "productPrice": 280000,
+    "productStock": 5,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": "P1005",
+    "categoryID": "C101",
+    "productName": "레오폴드 FC900R 청축",
+    "productDescription": "사무실에서 쓰면 팀장님한테 등짝 맞는 경쾌한 클릭음",
+    "productPrice": 145000,
+    "productStock": 0,
+    "productStatus": "DEACTIVATED"
+  }
+]
