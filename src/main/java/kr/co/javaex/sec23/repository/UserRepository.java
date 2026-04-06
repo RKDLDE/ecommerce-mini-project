@@ -14,7 +14,7 @@ public class UserRepository {
     private ObjectMapper mapper = new ObjectMapper();
 
     // 파일 불러오기
-    private final String FILE_PATH = "src/main/java/kr/co/javaex/sec23/util/users.json";
+    private final String FILE_PATH = "data/users.json";
 
 
     /**
