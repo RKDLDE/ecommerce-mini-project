@@ -8,6 +8,14 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository = new UserRepository();
 
+    /**
+     * 회원가입 로직
+     * 중복된 아이디나 이미 등록된 메일을 확인
+     * 비밀번호 유효성 확인
+     *
+     * @param newUser
+     * @return 모든통과시 true
+     */
     public boolean registerUser(User newUser) {
         // 레파지토리에서 꺼내오기
         List<User> allUsers = userRepository.findAll();
@@ -30,13 +38,17 @@ public class UserService {
             return false;
         }
 
-        // 4. 모든 통과 시 저장 요청
+        // 모든 통과 시 저장 요청
         userRepository.save(newUser);
         return true;
     }
 
     /**
-     * [2] 로그인 로직 [cite: 91, 92]
+     * 로그인 로직
+     * 이메일과 비밀번호가 일치하는지 확인한다.
+     * @param email
+     * @param password
+     * @return 일치시 user 객체 없을 시 null
      */
     public User login(String email, String password) {
         List<User> allUsers = userRepository.findAll();
@@ -51,11 +63,16 @@ public class UserService {
     }
 
     /**
-     * [3] 정보 수정 로직 [cite: 96]
+     * 정보 수정 로직
+     * ID로 회원을 찾고
+     * name, phone, email을 입력하여
+     * 정보를 수정한다.
      */
     public void updateProfile(String userId, String name, String phone, String email) {
+        // 유저 다 가져오고
         List<User> allUsers = userRepository.findAll();
 
+        // 해당 id와 일치하면 set 한다.
         for (User user : allUsers) {
             if (user.getUserID().equals(userId)) {
                 user.setUserName(name);

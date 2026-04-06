@@ -41,12 +41,20 @@ public class UserRepository {
         }
     }
 
+    /**
+     * 기존 users 배열에 newUser를 add하는 메서드
+     * @param newUser
+     */
     public void save(User newUser) {
         List<User> users = findAll();
         users.add(newUser);
         saveAll(users);
     }
 
+    /**
+     * 새로운 users 배열을 파일에 저장
+     * @param users
+     */
     public void saveAll(List<User> users) {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), users);
