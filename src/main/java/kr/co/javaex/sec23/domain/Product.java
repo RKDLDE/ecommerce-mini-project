@@ -1,7 +1,8 @@
 package kr.co.javaex.sec23.domain;
 
 public class Product {
-    private String productID;                  // 상품 ID
+    private String categoryID;              // 카테고리 ID
+    private String productID;               // 상품 ID
     private String productName;             // 상품명
     private String productDescription;      // 상세 설명
     private int productPrice;               // 가격
@@ -11,7 +12,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String productID, String productName, String productDescription, int productPrice, int productStock, ProductStatus productStatus) {
+    public Product(String categoryID, String productID, String productName, String productDescription, int productPrice, int productStock, ProductStatus productStatus) {
+        this.categoryID = categoryID;
         this.productID = productID;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -19,6 +21,14 @@ public class Product {
         this.productStock = productStock;
         this.productStatus = productStatus;
     }
+    public String getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
+    }
+
 
     public String getProductID() {
         return productID;

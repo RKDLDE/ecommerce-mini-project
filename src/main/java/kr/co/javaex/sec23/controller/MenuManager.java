@@ -46,7 +46,7 @@ public class MenuManager {
                 userController.signUp();
                 break;
             case 3:
-                // productController.showProductList();
+                 productController.showProductList();
                 break;
             case 0:
                 System.out.println("프로그램을 종료합니다.");
