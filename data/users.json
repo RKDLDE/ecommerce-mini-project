@@ -1,0 +1,57 @@
+[ {
+  "userID" : "admin01",
+  "userName" : "강이도은",
+  "userPW" : "Password123",
+  "userPhoneNumber" : "010-1234-5678",
+  "userEmail" : "admin@javaex.co.kr",
+  "userStatus" : "ENABLE",
+  "userAuth" : "ADMIN"
+}, {
+  "userID" : "user01",
+  "userName" : "이상혁",
+  "userPW" : "User1234",
+  "userPhoneNumber" : "010-1111-2222",
+  "userEmail" : "shlee@test.com",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+}, {
+  "userID" : "user02",
+  "userName" : "김부연",
+  "userPW" : "User1234",
+  "userPhoneNumber" : "010-3333-4444",
+  "userEmail" : "bykim@test.com",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+}, {
+  "userID" : "user03",
+  "userName" : "김희주",
+  "userPW" : "User1234",
+  "userPhoneNumber" : "010-5555-6666",
+  "userEmail" : "hjkim@test.com",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+}, {
+  "userID" : "user04",
+  "userName" : "테스터일",
+  "userPW" : "User1234",
+  "userPhoneNumber" : "010-7777-8888",
+  "userEmail" : "test1@test.com",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+}, {
+  "userID" : "user05",
+  "userName" : "테스터이",
+  "userPW" : "User1234",
+  "userPhoneNumber" : "010-9999-0000",
+  "userEmail" : "test2@test.com",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+}, {
+  "userID" : "user004",
+  "userName" : "캭",
+  "userPW" : "A123asd",
+  "userPhoneNumber" : "23",
+  "userEmail" : "ㄴㅇㄹ",
+  "userStatus" : "ENABLE",
+  "userAuth" : "USER"
+} ]
