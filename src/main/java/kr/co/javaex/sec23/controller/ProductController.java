@@ -17,7 +17,7 @@ public class ProductController {
     private ConsoleUtil consoleUtil = new ConsoleUtil();
     private CartService cartService = new CartService();
     /**
-     * Product 출력 메서드
+     * 일반 사용자용 Product 출력 메서드
      */
     public void printProduct() {
         System.out.println("\n=========================== 상품 목록 ===========================");
@@ -33,6 +33,8 @@ public class ProductController {
             return;
         }
 
+        // 카테고리별 출력
+        // 활성화된 상품만 출력
         for(Category category : categories){
             for(Product product : products){
                 if(product.getCategoryID().equals(category.getCategoryID())){
@@ -79,15 +81,15 @@ public class ProductController {
         System.out.println("=================================================================");
     }
     /**
-     * 상세 페이지..
+     * 상세 페이지..예쁘게
      */
     private void printProductDetail(Product product) {
         System.out.println("\n======================== 상품 상세 정보 ========================");
-        System.out.println("▶ 상품번호 : " + product.getProductID());
-        System.out.println("▶ 상품명 : " + product.getProductName());
-        System.out.println("▶ 가격 : " + product.getProductPrice() + "원");
-        System.out.println("▶ 남은재고 : " + product.getProductStock() + "개");
-        System.out.println("▶ 상태값 : " + (product.getProductStatus() == ProductStatus.ACTIVE ? "판매중" : "판매중지"));
+        System.out.println("상품번호 : " + product.getProductID());
+        System.out.println("상품명 : " + product.getProductName());
+        System.out.println("가격 : " + product.getProductPrice() + "원");
+        System.out.println("남은재고 : " + product.getProductStock() + "개");
+        System.out.println("상태값 : " + (product.getProductStatus() == ProductStatus.ACTIVE ? "판매중" : "판매중지"));
         System.out.println("=================================================================");
         System.out.println(product.getProductDescription());
         System.out.println("=================================================================\n");
@@ -95,6 +97,7 @@ public class ProductController {
 
     /**
      * 쇼핑 메서드
+     * 목록 확인하고 상세 보기 후 장바구니 담기 여부
      */
     public void showShoppingMenu(User loginUser) {
         while (true) {
@@ -253,7 +256,7 @@ public class ProductController {
     }
 
         /**
-         * 상품 삭제 메서드
+         * 상품 추가 메서드
          */
         private void addProduct() {
             System.out.println("\n========== 상품 추가 ==========");

@@ -1,8 +1,8 @@
 package kr.co.javaex.sec23.domain;
 
 public class Product {
-    private Long categoryID;              // 카테고리 ID
-    private Long productID;               // 상품 ID
+    private Long categoryID;                // 카테고리 ID
+    private Long productID;                 // 상품 ID
     private String productName;             // 상품명
     private String productDescription;      // 상세 설명
     private int productPrice;               // 가격

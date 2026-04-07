@@ -10,7 +10,7 @@ public class CategoryController {
     private ConsoleUtil consoleUtil = new ConsoleUtil();
 
     /**
-     * 카테고리 메뉴 보여주기
+     * 카테고리 메인 메뉴
      */
     public void showMenu() {
         while(true) {
@@ -29,7 +29,7 @@ public class CategoryController {
                     addCategory();
                     break;
                 case 4:
-//                    deleteCategory();
+                    deleteCategory();
                     break;
                 case 0:
                     System.out.println("이전 메뉴로 돌아갑니다.");
@@ -41,7 +41,7 @@ public class CategoryController {
     }
 
     /**
-     * 카테고리 출력
+     * 카테고리 목록 출력
      */
     private void printCategory() {
         System.out.println("\n============================= 카테고리 목록 =============================");
@@ -167,5 +167,29 @@ public class CategoryController {
     /**
      * 카테고리 삭제 (예외 처리..)
      */
+    private void deleteCategory() {
+        System.out.println("\n========== 카테고리 삭제 ==========");
+        printCategory();
 
+        long targetId = consoleUtil.readLong("삭제할 카테고리 ID 입력 (0: 취소): ");
+        if (targetId == 0) return;
+
+        if (!categoryService.isCategoryID(targetId)) {
+            System.out.println("해당하는 카테고리가 없습니다.");
+            return;
+        }
+
+        String confirm = consoleUtil.readString("삭제 시 해당 상품들은 '미분류'로 이동합니다. 삭제할까요? (Y/N): ");
+        if (!confirm.equalsIgnoreCase("Y")) return;
+
+        int result = categoryService.deleteCategory(targetId);
+
+        if (result == 1) {
+            System.out.println("성공적으로 삭제되었습니다.");
+        } else if (result == -1) {
+            System.out.println("삭제 실패: 하위 중분류가 존재합니다.");
+        } else {
+            System.out.println("삭제 중 오류가 발생했습니다.");
+        }
+    }
 }

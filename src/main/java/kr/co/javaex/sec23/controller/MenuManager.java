@@ -16,12 +16,16 @@ public class MenuManager {
 
     private ConsoleUtil consoleUtil = new ConsoleUtil();
 
+    /**
+     * 프로그램 시작
+     */
     public void start() {
         System.out.println("=========================================");
         System.out.println("       ️⌨️도은샵에 오신 것을 환영합니다⌨️       ");
         System.out.println("=========================================");
 
         while (true) {
+            // 권한에 따른 메뉴 출력
             if (currentUser == null) {
                 showGuestMenu();
             } else if (currentUser.getUserAuth() == UserAuth.ADMIN) {
@@ -32,7 +36,9 @@ public class MenuManager {
         }
     }
 
-    // 로그인 안되어있을 때
+    /**
+     * 비회원 메뉴
+     */
     private void showGuestMenu() {
         System.out.println("\n[ 게스트 메뉴 ]");
         System.out.println("1. 로그인 | 2. 회원가입 | 3. 상품 목록 보기 | 0. 종료");
@@ -40,7 +46,7 @@ public class MenuManager {
 
         switch (choice) {
             case 1:
-                currentUser = userController.login();
+                currentUser = userController.login(); // 로그인 성공 시 유저 정보 저장
                 break;
             case 2:
                 userController.signUp();
@@ -56,7 +62,9 @@ public class MenuManager {
         }
     }
 
-    // 관리자
+    /**
+     * 관리자 메뉴
+     */
     private void showAdminMenu() {
         System.out.println("\n[ 관리자 메뉴 ]");
         System.out.println("1. 카테고리 관리 | 2. 상품 관리 | 3. 회원 출력 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
@@ -71,7 +79,6 @@ public class MenuManager {
                 break;
             case 3:
                 userController.printAllUsers();
-                // 회원관리..
                 break;
             case 4:
                 userController.updateInfo(currentUser);
@@ -90,7 +97,9 @@ public class MenuManager {
         }
     }
 
-    // 일반 사용자
+    /**
+     * 일반 사용자 메뉴
+     */
     private void showUserMenu() {
         System.out.println("\n[ 회원 메뉴 ]");
         System.out.println("1. 상품 쇼핑 | 2. 장바구니 | 3. 내 정보 수정 | 4. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
@@ -104,12 +113,9 @@ public class MenuManager {
                  cartController.showMenu(currentUser);
                 break;
             case 3:
-                // orderController.showOrderList(currentUser);
-                break;
-            case 4:
                 userController.updateInfo(currentUser);
                 break;
-            case 5:
+            case 4:
                 userController.updatePw(currentUser);
                 break;
             case 9:
@@ -123,8 +129,11 @@ public class MenuManager {
         }
     }
 
+    /**
+     * 로그아웃
+     */
     private void logout() {
-        currentUser = null;
+        currentUser = null; // 로그인 유저 정보 초기화
         System.out.println("성공적으로 로그아웃 되었습니다.");
     }
 }

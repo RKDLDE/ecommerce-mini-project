@@ -1,8 +1,8 @@
 package kr.co.javaex.sec23.domain;
 
 public class Category {
-    private Long categoryID;       // 카테고리ID
-    private Long topCategoryID;   // 상위 카테고리 ID
+    private Long categoryID;        // 카테고리ID
+    private Long topCategoryID;     // 상위 카테고리 ID
     private String categoryName;    // 카테고리명
     private int sortOrder;          // 정렬순번?
 

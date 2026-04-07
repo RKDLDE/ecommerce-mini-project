@@ -26,6 +26,8 @@ public class CartService {
 
     /**
      * 장바구니에 상품 추가
+     * 기존 상품 확인 하고 수량을 더하거나
+     * 기존 상품이 없다며 ㄴ신규 생성
      */
     public void addCart(String userId, Long productId, int quantity) {
         List<Cart> allCarts = cartRepository.findAll();
@@ -97,6 +99,7 @@ public class CartService {
         List<Cart> allCarts = cartRepository.findAll();
         boolean isRemoved = false;
 
+
         for (Cart cart : allCarts) {
             if (cart.getCartID().equals(targetId)) {
                 int index = allCarts.indexOf(cart);
@@ -130,5 +133,31 @@ public class CartService {
 
         // 덮어쓰기....
         cartRepository.saveAll(remainingCarts);
+    }
+
+    /**
+     * 장바구니 선택/해제 상태 변경
+     */
+    public boolean toggleCheck(Long targetId) {
+        List<Cart> allCarts = cartRepository.findAll();
+        boolean isUpdated = false;
+
+        for (Cart cart : allCarts) {
+            if (cart.getCartID().equals(targetId)) {
+                int index = allCarts.indexOf(cart);
+
+                // 현재 상태의 반대값으로
+                cart.setChecked(!cart.isChecked());
+
+                allCarts.set(index, cart);
+                isUpdated = true;
+                break;
+            }
+        }
+
+        if (isUpdated) {
+            cartRepository.saveAll(allCarts);
+        }
+        return isUpdated;
     }
 }

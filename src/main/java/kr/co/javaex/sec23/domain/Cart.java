@@ -1,11 +1,11 @@
 package kr.co.javaex.sec23.domain;
 
 public class Cart {
-    private Long cartID;
-    private String userID;                  // 사용자 ID
-    private Long productID;               // 상품 ID
-    private int quantity;               // 재고수량
-    private boolean isChecked;              // 선택 여부
+    private Long cartID;            // 장바구니 ID
+    private String userID;          // 사용자 ID
+    private Long productID;         // 상품 ID
+    private int quantity;           // 재고수량
+    private boolean isChecked;      // 선택 여부
 
     public Cart() {
     }

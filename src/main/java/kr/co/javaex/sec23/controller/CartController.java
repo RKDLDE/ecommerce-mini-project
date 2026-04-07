@@ -4,23 +4,26 @@ import kr.co.javaex.sec23.domain.Cart;
 import kr.co.javaex.sec23.domain.Product;
 import kr.co.javaex.sec23.domain.User;
 import kr.co.javaex.sec23.service.CartService;
+import kr.co.javaex.sec23.service.OrderService;
 import kr.co.javaex.sec23.service.ProductService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartController {
     private CartService cartService = new CartService();
     private ProductService productService = new ProductService();
+    private OrderService orderService = new OrderService();
     private ConsoleUtil consoleUtil = new ConsoleUtil();
 
     /**
-     * 장바구니 메뉴 - 사용자용
+     * 장바구니 메인 메뉴
      */
     public void showMenu(User loginUser) {
         while (true) {
             System.out.println("\n[ " + loginUser.getUserName() + "님의 장바구니 ]");
-            System.out.println("1. 장바구니 조회 | 2. 수량 변경 | 3. 상품 삭제 | 4. 장바구니 비우기 | 5. 주문하기 | 0. 이전 메뉴");
+            System.out.println("1. 장바구니 조회 | 2. 상품 선택/해제 | 3. 수량 변경 | 4. 상품 삭제 | 5. 장바구니 비우기 | 6. 선택 상품 주문 | 0. 이전 메뉴");
             int choice = consoleUtil.readInt("선택: ");
 
             switch (choice) {
@@ -28,58 +31,61 @@ public class CartController {
                     printCart(loginUser);
                     break;
                 case 2:
-                    updateCartQuantity(loginUser);
+                    toggleCartItem(loginUser);
                     break;
                 case 3:
-                    deleteCartItem(loginUser);
+                    updateCartQuantity(loginUser);
                     break;
                 case 4:
-                    clearCart(loginUser);
+                    deleteCartItem(loginUser);
                     break;
                 case 5:
-                    System.out.println("주문 기능은 곧 업데이트 됩니다!");
+                    clearCart(loginUser);
+                    break;
+                case 6:
+                    orderCheckedItems(loginUser);
                     break;
                 case 0:
-                    System.out.println("이전 메뉴로 돌아갑니다.");
                     return;
                 default:
-                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
+                    System.out.println("잘못된 입력입니다.");
             }
         }
     }
 
     /**
-     * 장바구니 출력 메서드
+     * 장바구니 출력
      */
     public void printCart(User loginUser) {
-        System.out.println("\n================================= 장바구니 목록 =================================");
-        System.out.println("장바구니ID\t| 상품명\t\t\t\t\t\t\t| 수량\t| 단가\t\t| 총액");
-        System.out.println("=================================================================================");
+        System.out.println("\n======================================= 장바구니 목록 =======================================");
+        System.out.println("선택\t| 번호\t| 상품명\t\t\t\t\t\t\t| 수량\t| 단가\t\t| 총액");
+        System.out.println("=============================================================================================");
 
-        // 현재 로그인한 유저의 장바구니 목록
         List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
 
         // 비어있으면
         if (carts.isEmpty()) {
             System.out.println("장바구니가 비어있습니다.");
-            System.out.println("=================================================================================");
+            System.out.println("=============================================================================================");
             return;
         }
 
-        int totalPrice = 0;
+        int totalCheckedPrice = 0;
 
         for (Cart cart : carts) {
-            // 장바구니의 productID를 이용해서 다른 정보 가져오기
             Product product = productService.getProduct(cart.getProductID());
 
             if (product != null) {
-                // 가격은 가격과ㅣ.. cart의 수량을 곱해서 가져오기
                 int itemTotal = product.getProductPrice() * cart.getQuantity();
+                String checkMark = cart.isChecked() ? "[ V ]" : "[   ]";
 
-                // 총금액
-                totalPrice += itemTotal;
+                // 체크된 상품 총액 계산
+                if (cart.isChecked()) {
+                    totalCheckedPrice += itemTotal;
+                }
 
-                System.out.printf("%d\t\t| %s\t| %d개\t| %,d원\t| %,d원\n",
+                System.out.printf("%s\t| %d\t| %s\t| %d개\t| %,d원\t| %,d원\n",
+                        checkMark,
                         cart.getCartID(),
                         product.getProductName(),
                         cart.getQuantity(),
@@ -87,24 +93,100 @@ public class CartController {
                         itemTotal);
             }
         }
-        System.out.println("=================================================================================");
-        System.out.printf("▶ 총 결제 예정 금액: %,d원\n", totalPrice);
-        System.out.println("=================================================================================\n");
+        System.out.println("=============================================================================================");
+        System.out.printf("현재 선택된 상품 총 결제 예정 금액: %,d원\n", totalCheckedPrice);
+        System.out.println("=============================================================================================\n");
     }
 
     /**
-     * 장바구니 수량 변경 메서드
+     * 상품 선택/해제
+     */
+    private void toggleCartItem(User loginUser) {
+        printCart(loginUser);
+        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
+        if (carts.isEmpty()) return;
+
+        long targetId = consoleUtil.readLong("선택 상태를 변경할 장바구니 번호 입력 (0: 취소): ");
+        if (targetId == 0) return;
+
+        boolean isToggled = cartService.toggleCheck(targetId);
+        if (isToggled) {
+            System.out.println("선택 상태가 변경되었습니다.");
+        } else {
+            System.out.println("해당하는 장바구니 상품이 없습니다.");
+        }
+    }
+
+    /**
+     * 선택 상품 주문
+     */
+    private void orderCheckedItems(User loginUser) {
+        printCart(loginUser);
+
+        List<Cart> myCarts = cartService.getMyCart(loginUser.getUserID());
+        List<Cart> checkedCarts = new ArrayList<>();
+        int totalOrderPrice = 0;
+
+        // 체크된 상품 가져오기
+        for (Cart cart : myCarts) {
+            if (cart.isChecked()) {
+                checkedCarts.add(cart);
+            }
+        }
+
+        // 체크 안했으면
+        if (checkedCarts.isEmpty()) {
+            System.out.println("선택된 상품이 없습니다. 먼저 결제할 상품을 체크해주세요.");
+            return;
+        }
+
+        // 재고 확인
+        for (Cart cart : checkedCarts) {
+            Product product = productService.getProduct(cart.getProductID());
+            if (cart.getQuantity() > product.getProductStock()) {
+                System.out.println("[" + product.getProductName() + "] 상품의 재고가 부족하여 결제를 진행할 수 없습니다.");
+                return;
+            }
+            totalOrderPrice += product.getProductPrice() * cart.getQuantity();
+        }
+
+        // 결제 확인
+        System.out.printf("선택하신 %d개 상품의 총 결제 금액은 [%,d원] 입니다.\n", checkedCarts.size(), totalOrderPrice);
+        String confirm = consoleUtil.readString("정말 결제하시겠습니까? (Y/N): ");
+
+        if (confirm.equalsIgnoreCase("Y")) {
+            for (Cart cart : checkedCarts) {
+                Product product = productService.getProduct(cart.getProductID());
+
+                // 재고 차감
+                product.setProductStock(product.getProductStock() - cart.getQuantity());
+                productService.updateProduct(product);
+
+                // 영수증 생성
+                int itemTotal = product.getProductPrice() * cart.getQuantity();
+                orderService.addOrder(loginUser.getUserID(), product.getProductID(), cart.getQuantity(), itemTotal);
+
+                // 장바구니 삭제
+                cartService.deleteItem(cart.getCartID());
+            }
+
+            System.out.println("선택하신 상품의 결제가 완료되었습니다.");
+        } else {
+            System.out.println("결제가 취소되었습니다.");
+        }
+    }
+
+    /**
+     * 장바구니 수량 변경
      */
     private void updateCartQuantity(User loginUser) {
         printCart(loginUser);
 
         List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
-        // 장바구니가 비어있다면?:? 돌아가기
-        if (carts.isEmpty())
-            return;
+        if (carts.isEmpty()) return;
 
         long targetId = consoleUtil.readLong("수량을 변경할 장바구니 ID 입력: ");
-        // 변경할 장바구니를 가져오기..
+
         Cart targetCart = null;
         for (Cart cart : carts) {
             if (cart.getCartID().equals(targetId)) {
@@ -113,31 +195,37 @@ public class CartController {
             }
         }
 
+        if (targetCart == null) {
+            System.out.println("해당하는 상품이 없습니다.");
+            return;
+        }
+
         int newQuantity = consoleUtil.readInt("변경할 수량 입력: ");
 
-        // 수량 음수 확인
+        // 수량 유효성 검사
         if (newQuantity <= 0) {
             System.out.println("수량은 1개 이상이어야 합니다.");
             return;
         }
 
-        // q변경된 수량이 재고를 초과하진 않는지
+        // 재고 확인
         Product product = productService.getProduct(targetCart.getProductID());
         if (newQuantity > product.getProductStock()) {
             System.out.println("남은 재고가 부족합니다. (현재 재고: " + product.getProductStock() + "개)");
             return;
         }
+
         boolean isUpdated = cartService.updateQuantity(targetId, newQuantity);
 
         if (isUpdated) {
             System.out.println("수량이 성공적으로 변경되었습니다.");
         } else {
-            System.out.println("해당하는 장바구니 상품이 없습니다.");
+            System.out.println("수량 변경에 실패했습니다.");
         }
     }
 
     /**
-     * 장바구니 상품 삭제
+     * 장바구니 개별 상품 삭제
      */
     private void deleteCartItem(User loginUser) {
         printCart(loginUser);
@@ -161,12 +249,11 @@ public class CartController {
     }
 
     /**
-     * 장바구니 전체 비우기 메서드
+     * 장바구니 전체 비우기
      */
     private void clearCart(User loginUser) {
         List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
 
-        // 장바구니가 비어있다면
         if (carts.isEmpty()) {
             System.out.println("장바구니가 이미 비어있습니다.");
             return;

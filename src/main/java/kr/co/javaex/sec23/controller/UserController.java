@@ -35,13 +35,14 @@ public class UserController {
     }
 
     /**
-     * 회원가입
+     * 회원가입 (이메일, ID, 비밀번호 중복 및 유효성 검사 포함)
      */
     public void signUp() {
         System.out.println("\n=========== 회원가입 ===========");
         String name = consoleUtil.readString("이름 입력: ");
         String phone = consoleUtil.readString("전화번호 입력: ");
 
+        // 이메일 중복 검사
         String email;
         while(true){
             email = consoleUtil.readString("이메일 입력: ");
@@ -53,6 +54,7 @@ public class UserController {
             }
         }
 
+        // 아이디 중복 및 유효성 검사
         String id;
         while(true){
             id = consoleUtil.readString("ID 입력 (5~15자리): ");
@@ -64,6 +66,7 @@ public class UserController {
             }
         }
 
+        // 비밀번호 정규식 검사
         String pw;
         while(true){
             pw = consoleUtil.readString("비밀번호 입력 (영소/대문자, 숫자 포함 5~15자리): ");
@@ -86,12 +89,14 @@ public class UserController {
 
     /**
      * 회원 정보 수정
+     * 이름, 전화번호, 이메일
      */
     public void  updateInfo(User user){
         System.out.println("\n=========== 내 정보 수정 ===========");
         String name = consoleUtil.readString("바꿀 이름 입력: ");
         String phone = consoleUtil.readString("바꿀 전화번호 입력: ");
         String email;
+        // 이메일 중복 검사
         while(true){
             email = consoleUtil.readString("이메일 입력: ");
             if(userService.isPossibleEmail(email)) {
@@ -106,6 +111,7 @@ public class UserController {
 
     /**
      * 비밀번호 수정
+     * 기존 비밀번호 확인 후 변경ㄹ
      */
     public void updatePw(User currentUser) {
         System.out.println("\n=========== 비밀번호 변경 ===========");
@@ -133,6 +139,9 @@ public class UserController {
         currentUser.setUserPW(newPw);
     }
 
+    /**
+     * 전체 회원 목록 출력 - 관리자
+     */
     public void printAllUsers() {
         System.out.println("\n================================================= 전체 회원 목록 =================================================");
         System.out.println("아이디\t\t| 이름\t| 이메일\t\t\t\t| 전화번호\t\t| 상태\t\t| 권한");

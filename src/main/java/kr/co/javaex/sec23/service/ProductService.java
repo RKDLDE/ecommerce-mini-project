@@ -8,6 +8,10 @@ import java.util.List;
 
 public class ProductService {
     private ProductRepository productRepository = new ProductRepository();
+
+    /**
+     * 상품 전체 목록
+     */
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -114,5 +118,24 @@ public class ProductService {
         }
 
         return isRemoved;
+    }
+
+    /**
+     * 삭제되는 카테고리의 상품들을 미분류(0)로 이동
+     */
+    public void moveProductsToDefault(Long categoryId) {
+        List<Product> allProducts = productRepository.findAll();
+        boolean isChanged = false;
+
+        for (Product p : allProducts) {
+            if (p.getCategoryID().equals(categoryId)) {
+                p.setCategoryID(0L); // 0번을 '미분류'로 약속
+                isChanged = true;
+            }
+        }
+
+        if (isChanged) {
+            productRepository.saveAll(allProducts);
+        }
     }
 }
