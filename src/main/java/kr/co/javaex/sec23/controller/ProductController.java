@@ -3,6 +3,8 @@ package kr.co.javaex.sec23.controller;
 import kr.co.javaex.sec23.domain.Category;
 import kr.co.javaex.sec23.domain.Product;
 import kr.co.javaex.sec23.domain.ProductStatus;
+import kr.co.javaex.sec23.domain.User;
+import kr.co.javaex.sec23.service.CartService;
 import kr.co.javaex.sec23.service.CategoryService;
 import kr.co.javaex.sec23.service.ProductService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
@@ -13,6 +15,7 @@ public class ProductController {
     private ProductService productService = new ProductService();
     private CategoryService categoryService = new CategoryService();
     private ConsoleUtil consoleUtil = new ConsoleUtil();
+    private CartService cartService = new CartService();
     /**
      * Product 출력 메서드
      */
@@ -43,27 +46,38 @@ public class ProductController {
             }
         }
         System.out.println("=================================================================");
-
-        // 상세...페이지 보기
-        while (true) {
-            long targetId = consoleUtil.readLong("\n상세 정보를 볼 상품 ID 입력 (0: 이전 메뉴로 돌아가기): ");
-
-            if (targetId == 0) {
-                System.out.println("목록 조회를 종료합니다.");
-                return;
-            }
-
-            // ID 존재하는가?
-            if (productService.isProductID(targetId)) {
-                Product targetProduct = productService.getProduct(targetId);
-                printProductDetail(targetProduct);
-                break;
-            } else {
-                System.out.println("해당하는 상품이 없습니다. 번호를 다시 확인해주세요.");
-            }
-        }
     }
 
+    /**
+     * 관리자용.. 상품 출력 (판매중지인것도 보기)
+     */
+    public void printAllProduct() {
+        System.out.println("\n=========================== 상품 목록 ===========================");
+        System.out.println("상품ID\t| 카테고리\t| 상품명\t| 상태");
+        System.out.println("=================================================================");
+
+        List<Product> products = productService.getAllProducts();
+        List<Category> categories = categoryService.getAllCategories();
+
+        if (products.isEmpty()) {
+            System.out.println("등록된 상품이 없습니다.");
+            System.out.println("=================================================================");
+            return;
+        }
+
+        for(Category category : categories){
+            for(Product product : products){
+                if(product.getCategoryID().equals(category.getCategoryID())){
+                        System.out.printf("%d\t| %s\t| %s\t| %s\n",
+                                product.getProductID(),
+                                category.getCategoryName(),
+                                product.getProductName(),
+                                product.getProductStatus());
+                    }
+                }
+            }
+        System.out.println("=================================================================");
+    }
     /**
      * 상세 페이지..
      */
@@ -80,6 +94,61 @@ public class ProductController {
     }
 
     /**
+     * 쇼핑 메서드
+     */
+    public void showShoppingMenu(User loginUser) {
+        while (true) {
+            printProduct(); // 상품 목록 띄우기
+
+            long targetId = consoleUtil.readLong("\n상세 정보를 볼 상품 ID 입력 (0: 이전 메뉴로 돌아가기): ");
+
+            if (targetId == 0) {
+                System.out.println("쇼핑 메뉴를 종료합니다.");
+                return;
+            }
+
+            if (productService.isProductID(targetId)) {
+                Product targetProduct = productService.getProduct(targetId);
+                printProductDetail(targetProduct); // 상세 정보 띄우기
+
+                // 장바구니 여부
+                System.out.println("1. 장바구니에 담기 | 0. 목록으로 돌아가기");
+                int choice = consoleUtil.readInt("선택: ");
+
+                if (choice == 1) {
+                    addToCart(loginUser, targetProduct);
+                }
+            } else {
+                System.out.println("해당하는 상품이 없습니다. 번호를 다시 확인해주세요.");
+            }
+        }
+    }
+
+    /**
+     * 장바구니 담기
+     */
+    private void addToCart(User loginUser, Product product) {
+        if (product.getProductStatus() != ProductStatus.ACTIVE) {
+            System.out.println("현재 판매가 중지된 상품입니다.");
+            return;
+        }
+
+        int quantity = consoleUtil.readInt("몇 개를 담으시겠습니까? : ");
+
+        if (quantity <= 0) {
+            System.out.println("수량은 1개 이상이어야 합니다.");
+            return;
+        }
+
+        if (quantity > product.getProductStock()) {
+            System.out.println("남은 재고가 부족합니다. (현재 재고: " + product.getProductStock() + "개)");
+            return;
+        }
+
+        cartService.addCart(loginUser.getUserID(), product.getProductID(), quantity);
+        System.out.println("[" + product.getProductName() + "] " + quantity + "개가 장바구니에 성공적으로 담겼습니다.");
+    }
+    /**
      * 상품 메뉴 - 관리자
      */
     public void showMenu() {
@@ -90,7 +159,7 @@ public class ProductController {
 
             switch (choice){
                 case 1:
-                    printProduct();
+                    printAllProduct();
                     break;
                 case 2:
                     updateProduct();
@@ -114,7 +183,7 @@ public class ProductController {
      * 상품 수정 메서드
      */
     private void updateProduct() {
-        printProduct();
+        printAllProduct();
         long targetId;
         Product targetProduct;
         // 상품 존재 여부
@@ -152,7 +221,7 @@ public class ProductController {
                     System.out.println("가격이 변경되었습니다.");
                     break;
                 case 4:
-                    int newStock = ConsoleUtil.readInt("바꿀 재고 입력: ");
+                    int newStock = consoleUtil.readInt("바꿀 재고 입력: ");
                     targetProduct.setProductStock(newStock);
                     System.out.println("재고가 변경되었습니다.");
                     break;
@@ -227,7 +296,7 @@ public class ProductController {
      */
     private void deleteProduct() {
         System.out.println("\n========== 상품 삭제 ==========");
-        printProduct();
+        printAllProduct();
 
         long targetId = consoleUtil.readLong("삭제할 상품 ID 입력: ");
 

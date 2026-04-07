@@ -93,15 +93,15 @@ public class MenuManager {
     // 일반 사용자
     private void showUserMenu() {
         System.out.println("\n[ 회원 메뉴 ]");
-        System.out.println("1. 상품 쇼핑 | 2. 장바구니 | 3. 주문 내역 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
+        System.out.println("1. 상품 쇼핑 | 2. 장바구니 | 3. 내 정보 수정 | 4. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
         int choice = consoleUtil.readInt("선택: ");
 
         switch (choice) {
             case 1:
-                 productController.printProduct();
+                 productController.showShoppingMenu(currentUser);
                 break;
             case 2:
-                // cartController.showCartMenu(currentUser);
+                 cartController.showMenu(currentUser);
                 break;
             case 3:
                 // orderController.showOrderList(currentUser);

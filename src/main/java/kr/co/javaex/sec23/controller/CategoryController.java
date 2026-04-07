@@ -152,6 +152,7 @@ public class CategoryController {
     private boolean printOnlyTopCategories() {
         System.out.println("\n[ 선택 가능한 대분류 목록 ]");
         List<Category> categories = categoryService.getAllCategories();
+        // 잘 가져왔는지 확인용
         boolean hasTopCategory = false;
 
         for (Category c : categories) {
@@ -164,25 +165,7 @@ public class CategoryController {
     }
 
     /**
-     * 카테고리 삭제 (예외 처리 적용)
+     * 카테고리 삭제 (예외 처리..)
      */
-//    private void deleteCategory() {
-//        System.out.println("\n========== 카테고리 삭제 ==========");
-//        printCategory();
-//
-//        long targetId = consoleUtil.readLong("삭제할 카테고리 ID 입력: ");
-//
-//        String confirm = consoleUtil.readString("정말 삭제하시겠습니까? (Y/N): ");
-//        if (!confirm.equalsIgnoreCase("Y")) {
-//            System.out.println("삭제가 취소되었습니다.");
-//            return;
-//        }
-//
-//        try {
-//            categoryService.deleteCategory(targetId);
-//            System.out.println("✅ 카테고리가 성공적으로 삭제되었습니다.");
-//        } catch (IllegalStateException | IllegalArgumentException e) {
-//            System.out.println("❌ 삭제 실패: " + e.getMessage());
-//        }
-//    }
+
 }

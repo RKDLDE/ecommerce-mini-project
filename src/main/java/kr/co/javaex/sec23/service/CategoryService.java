@@ -63,20 +63,7 @@ public class CategoryService {
     /**
      * 카테고리 삭제
      */
-//    public void deleteCategory(Long targetId) {
-//        if (hasSubCategories(targetId)) {
-//            throw new IllegalStateException("해당 대분류에 속한 중분류가 존재합니다. 중분류를 먼저 모두 삭제해주세요.");
-//        }
-//
-//        List<Category> categories = categoryRepository.findAll();
-//        boolean isRemoved = categories.removeIf(c -> c.getCategoryID().equals(targetId));
-//
-//        if (isRemoved) {
-//            categoryRepository.saveAll(categories);
-//        } else {
-//            throw new IllegalArgumentException("해당 ID의 카테고리를 찾을 수 없습니다.");
-//        }
-//    }
+
 
     /**
      * 입력받은 ID가 실제로 존재하는지

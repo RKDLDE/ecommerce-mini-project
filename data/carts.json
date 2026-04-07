@@ -1,1 +1,7 @@
-[]
+[ {
+  "cartID" : 1,
+  "userID" : "user01",
+  "productID" : 2004,
+  "quantity" : 500,
+  "checked" : true
+} ]
