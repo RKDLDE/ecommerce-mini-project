@@ -9,6 +9,13 @@ public class UserService {
     private UserRepository userRepository = new UserRepository();
 
     /**
+     * 전체 유저 가져오기
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    /**
      * ID 유효성 검사
      * 정규식 만족 + 중복 X
      */

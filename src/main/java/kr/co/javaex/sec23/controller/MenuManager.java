@@ -59,7 +59,7 @@ public class MenuManager {
     // 관리자
     private void showAdminMenu() {
         System.out.println("\n[ 관리자 메뉴 ]");
-        System.out.println("1. 카테고리 관리 | 2. 상품 관리 | 3. 회원 관리 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
+        System.out.println("1. 카테고리 관리 | 2. 상품 관리 | 3. 회원 출력 | 4. 내 정보 수정 | 5. 비밀번호 변경 | 9. 로그아웃 | 0. 종료");
         int choice = consoleUtil.readInt("선택: ");
 
         switch (choice) {
@@ -70,6 +70,7 @@ public class MenuManager {
                  productController.showMenu();
                 break;
             case 3:
+                userController.printAllUsers();
                 // 회원관리..
                 break;
             case 4:

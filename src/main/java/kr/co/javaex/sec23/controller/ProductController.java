@@ -17,15 +17,16 @@ public class ProductController {
      * Product 출력 메서드
      */
     public void printProduct() {
-        System.out.println("\n=============================== 상품 목록 ===============================");
-        System.out.println("상품ID\t| 카테고리\t| 상품명\t\t\t\t\t\t\t| 가격\t\t| 재고\t| 상품 설명");
-        System.out.println("========================================================================");
+        System.out.println("\n=========================== 상품 목록 ===========================");
+        System.out.println("상품ID\t| 카테고리\t| 상품명");
+        System.out.println("=================================================================");
 
         List<Product> products = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategories();
+
         if (products.isEmpty()) {
-            System.out.println("상품이 없습니다.");
-            System.out.println("=========================================================================");
+            System.out.println("등록된 상품이 없습니다.");
+            System.out.println("=================================================================");
             return;
         }
 
@@ -33,19 +34,49 @@ public class ProductController {
             for(Product product : products){
                 if(product.getCategoryID().equals(category.getCategoryID())){
                     if(product.getProductStatus() == ProductStatus.ACTIVE){
-                        System.out.printf("%d\t %s\t| %s\t| %,d원\t| %d개\t| %s\n",
+                        System.out.printf("%d\t| %s\t| %s\n",
                                 product.getProductID(),
                                 category.getCategoryName(),
-                                product.getProductName(),
-                                product.getProductPrice(),
-                                product.getProductStock(),
-                                product.getProductDescription());
+                                product.getProductName());
                     }
                 }
             }
         }
+        System.out.println("=================================================================");
 
-        System.out.println("========================================================================");
+        // 상세...페이지 보기
+        while (true) {
+            long targetId = consoleUtil.readLong("\n상세 정보를 볼 상품 ID 입력 (0: 이전 메뉴로 돌아가기): ");
+
+            if (targetId == 0) {
+                System.out.println("목록 조회를 종료합니다.");
+                return;
+            }
+
+            // ID 존재하는가?
+            if (productService.isProductID(targetId)) {
+                Product targetProduct = productService.getProduct(targetId);
+                printProductDetail(targetProduct);
+                break;
+            } else {
+                System.out.println("해당하는 상품이 없습니다. 번호를 다시 확인해주세요.");
+            }
+        }
+    }
+
+    /**
+     * 상세 페이지..
+     */
+    private void printProductDetail(Product product) {
+        System.out.println("\n======================== 상품 상세 정보 ========================");
+        System.out.println("▶ 상품번호 : " + product.getProductID());
+        System.out.println("▶ 상품명 : " + product.getProductName());
+        System.out.println("▶ 가격 : " + product.getProductPrice() + "원");
+        System.out.println("▶ 남은재고 : " + product.getProductStock() + "개");
+        System.out.println("▶ 상태값 : " + (product.getProductStatus() == ProductStatus.ACTIVE ? "판매중" : "판매중지"));
+        System.out.println("=================================================================");
+        System.out.println(product.getProductDescription());
+        System.out.println("=================================================================\n");
     }
 
     /**
@@ -65,10 +96,10 @@ public class ProductController {
                     updateProduct();
                     break;
                 case 3:
-//                    addProduct();
+                    addProduct();
                     break;
                 case 4:
-//                    deleteProduct();
+                    deleteProduct();
                     break;
                 case 0:
                     System.out.println("이전 메뉴로 돌아갑니다.");
@@ -150,19 +181,73 @@ public class ProductController {
                     System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
             }
         }
+    }
 
         /**
          * 상품 삭제 메서드
          */
-//    private void deleteProduct() {
-//    }
-//
-        /**
-         * 상품 추가 메서드
-         */
-//    private void addProduct() {
-//
-//    }
+        private void addProduct() {
+            System.out.println("\n========== 상품 추가 ==========");
 
+            // 카테고리 여부 확인
+            List<Category> categories = categoryService.getAllCategories();
+            if (categories.isEmpty()) {
+                System.out.println("등록된 카테고리가 없습니다.");
+                return;
+            }
+
+            System.out.println("\n[ 등록 가능한 카테고리 목록 ]");
+            for (Category c : categories) {
+                System.out.println("ID: " + c.getCategoryID() + " | 카테고리명: " + c.getCategoryName());
+            }
+
+            // 카테고리 입력
+            long categoryId;
+            while(true) {
+                categoryId = consoleUtil.readLong("\n등록할 카테고리 ID 입력: ");
+                if (categoryService.isCategoryID(categoryId)) {
+                    break;
+                } else {
+                    System.out.println("존재하지 않는 카테고리 ID입니다. 다시 입력해주세요.");
+                }
+            }
+
+            // 상품 정보 입력
+            String productName = consoleUtil.readString("상품명: ");
+            String productDescription = consoleUtil.readString("상품 설명: ");
+            int productPrice = consoleUtil.readInt("가격: ");
+            int productStock = consoleUtil.readInt("재고: ");
+
+            productService.addProduct(categoryId, productName, productDescription, productPrice, productStock);
+            System.out.println("새 상품이 성공적으로 추가되었습니다!");
+        }
+
+    /**
+     * 상품 삭제 메서드
+     */
+    private void deleteProduct() {
+        System.out.println("\n========== 상품 삭제 ==========");
+        printProduct();
+
+        long targetId = consoleUtil.readLong("삭제할 상품 ID 입력: ");
+
+        // 존재하는 ID인가?
+        if (!productService.isProductID(targetId)) {
+            System.out.println("해당 ID의 상품이 존재하지 않습니다.");
+            return;
+        }
+
+        // 삭제 여부 한번더
+        String confirm = consoleUtil.readString("정말 삭제하시겠습니까? (Y/N): ");
+        if (confirm.equalsIgnoreCase("Y")) {
+            boolean isDeleted = productService.deleteProduct(targetId);
+            if (isDeleted) {
+                System.out.println("상품이 성공적으로 삭제되었습니다.");
+            } else {
+                System.out.println("삭제 처리 중 오류가 발생했습니다.");
+            }
+        } else {
+            System.out.println("삭제가 취소되었습니다.");
+        }
     }
 }

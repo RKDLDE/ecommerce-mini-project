@@ -6,6 +6,7 @@ import kr.co.javaex.sec23.domain.UserStatus;
 import kr.co.javaex.sec23.service.UserService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class UserController {
@@ -130,5 +131,32 @@ public class UserController {
         userService.updatePassword(currentUser.getUserID(), newPw);
         System.out.println("비밀번호가 성공적으로 변경되었습니다.");
         currentUser.setUserPW(newPw);
+    }
+
+    public void printAllUsers() {
+        System.out.println("\n================================================= 전체 회원 목록 =================================================");
+        System.out.println("아이디\t\t| 이름\t| 이메일\t\t\t\t| 전화번호\t\t| 상태\t\t| 권한");
+        System.out.println("==================================================================================================================");
+
+        // 모든 유저 목록 가져오기
+        List<User> users = userService.getAllUsers();
+
+        if (users.isEmpty()) {
+            System.out.println("등록된 회원이 없습니다.");
+            System.out.println("==================================================================================================================");
+            return;
+        }
+
+        // 향상된 for문으로 유저 정보 출력
+        for (User u : users) {
+            System.out.printf("%s\t| %s\t| %s\t| %s\t| %s\t| %s\n",
+                    u.getUserID(),
+                    u.getUserName(),
+                    u.getUserEmail(),
+                    u.getUserPhoneNumber(),
+                    u.getUserStatus(),
+                    u.getUserAuth());
+        }
+        System.out.println("==================================================================================================================");
     }
 }

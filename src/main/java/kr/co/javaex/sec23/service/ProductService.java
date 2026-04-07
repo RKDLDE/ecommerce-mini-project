@@ -1,6 +1,7 @@
 package kr.co.javaex.sec23.service;
 
 import kr.co.javaex.sec23.domain.Product;
+import kr.co.javaex.sec23.domain.ProductStatus;
 import kr.co.javaex.sec23.repository.ProductRepository;
 
 import java.util.List;
@@ -63,5 +64,55 @@ public class ProductService {
             productRepository.saveAll(allProducts);
         }
         return isUpdated;
+    }
+
+    /**
+     * 상품 추가
+     */
+    public void addProduct(Long categoryId, String productName, String productDescription, int productPrice, int productStock) {
+        List<Product> allProducts = productRepository.findAll();
+
+        // ID 자동 증가
+        long maxId = 0L;
+
+        // 가장 큰 값 찾아서
+        for (Product p : allProducts) {
+            if (p.getProductID() > maxId) {
+                maxId = p.getProductID();
+            }
+        }
+        // + 1하기
+        long nextId = maxId + 1L;
+
+        Product newProduct = new Product(categoryId, nextId, productName, productDescription, productPrice, productStock, ProductStatus.ACTIVE);
+
+        // 추가하고
+        allProducts.add(newProduct);
+        // 덮어쓰기
+        productRepository.saveAll(allProducts);
+    }
+
+    /**
+     * 상품 삭제
+     */
+    public boolean deleteProduct(Long targetId) {
+        List<Product> allProducts = productRepository.findAll();
+        boolean isRemoved = false;
+
+        for (Product product : allProducts) {
+            if (product.getProductID().equals(targetId)) {
+
+                int index = allProducts.indexOf(product);
+                allProducts.remove(index);
+                isRemoved = true;
+                break;
+            }
+        }
+
+        if (isRemoved) {
+            productRepository.saveAll(allProducts);
+        }
+
+        return isRemoved;
     }
 }
