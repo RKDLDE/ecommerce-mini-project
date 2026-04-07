@@ -46,7 +46,7 @@ public class MenuManager {
                 userController.signUp();
                 break;
             case 3:
-                 productController.showProductList();
+                 productController.printProduct();
                 break;
             case 0:
                 System.out.println("프로그램을 종료합니다.");
@@ -64,10 +64,10 @@ public class MenuManager {
 
         switch (choice) {
             case 1:
-                // categoryController.showMenu();
+                 categoryController.showMenu();
                 break;
             case 2:
-                // productController.showAdminMenu();
+                 productController.showMenu();
                 break;
             case 3:
                 // 회원관리..
@@ -97,7 +97,7 @@ public class MenuManager {
 
         switch (choice) {
             case 1:
-                // productController.showProductList();
+                 productController.printProduct();
                 break;
             case 2:
                 // cartController.showCartMenu(currentUser);

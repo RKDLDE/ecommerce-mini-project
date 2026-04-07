@@ -12,6 +12,10 @@ public class UserController {
     private UserService userService = new UserService();
     private ConsoleUtil consoleUtil = new ConsoleUtil();
     // 로그인
+
+    /**
+     * 로그인
+     */
     public User login() {
         System.out.println("\n=========== 로그인 ===========");
         String email = consoleUtil.readString("이메일 입력: ");
@@ -21,7 +25,7 @@ public class UserController {
 
         // 돌아온 객체가 있으면 그대로 menu로 보내기
         if (loginUser != null){
-            System.out.println("로그인 성공");
+            System.out.println("안녕하세요 " + loginUser.getUserName() + "님!");
             return loginUser;
         } else {
             System.out.println("로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
@@ -29,7 +33,9 @@ public class UserController {
         }
     }
 
-    // 회원 가입
+    /**
+     * 회원가입
+     */
     public void signUp() {
         System.out.println("\n=========== 회원가입 ===========");
         String name = consoleUtil.readString("이름 입력: ");
@@ -77,7 +83,9 @@ public class UserController {
         }
     }
 
-    // 정보 수정
+    /**
+     * 회원 정보 수정
+     */
     public void  updateInfo(User user){
         System.out.println("\n=========== 내 정보 수정 ===========");
         String name = consoleUtil.readString("바꿀 이름 입력: ");
@@ -95,6 +103,9 @@ public class UserController {
         userService.updateProfile(user.getUserID(), name, phone, email);
     }
 
+    /**
+     * 비밀번호 수정
+     */
     public void updatePw(User currentUser) {
         System.out.println("\n=========== 비밀번호 변경 ===========");
 

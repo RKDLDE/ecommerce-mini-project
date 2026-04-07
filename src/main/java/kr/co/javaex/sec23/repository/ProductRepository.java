@@ -30,7 +30,7 @@ public class ProductRepository {
         }
         // 존재한다면
         try {
-            // User를 담는 배열 초기화
+            // Products를 담는 배열 초기화
             Product[] products = mapper.readValue(file, Product[].class);
             // arraylist 형태로 반환
             return new ArrayList<>(Arrays.asList(products));
@@ -38,6 +38,14 @@ public class ProductRepository {
             // 파일 읽기 오류 시 출력 -> 빈 배열 반환
             System.out.println("파일 읽기 오류: " + e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public void saveAll(List<Product> products){
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), products);
+        } catch (IOException e) {
+            System.out.println("파일 저장 오류: " + e.getMessage());
         }
     }
 }
