@@ -1,34 +1,34 @@
 package kr.co.javaex.sec23.domain;
 
 public class Category {
-    private String categoryID;       // 카테고리ID
-    private String topCategoryID;   // 상위 카테고리 ID
+    private Long categoryID;       // 카테고리ID
+    private Long topCategoryID;   // 상위 카테고리 ID
     private String categoryName;    // 카테고리명
     private int sortOrder;          // 정렬순번?
 
     public Category() {
     }
 
-    public Category(String categoryID, String topCategoryID, String categoryName, int sortOrder) {
+    public Category(Long categoryID, Long topCategoryID, String categoryName, int sortOrder) {
         this.categoryID = categoryID;
         this.topCategoryID = topCategoryID;
         this.categoryName = categoryName;
         this.sortOrder = sortOrder;
     }
 
-    public String getCategoryID() {
+    public Long getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(String categoryID) {
+    public void setCategoryID(Long categoryID) {
         this.categoryID = categoryID;
     }
 
-    public String getTopCategoryID() {
+    public Long getTopCategoryID() {
         return topCategoryID;
     }
 
-    public void setTopCategoryID(String topCategoryID) {
+    public void setTopCategoryID(Long topCategoryID) {
         this.topCategoryID = topCategoryID;
     }
 
