@@ -31,7 +31,7 @@ public class OrderService {
     public void addOrder(String userId, Long productId, int quantity, int paymentPrice) {
         List<Order> allOrders = orderRepository.findAll();
 
-        // 도은님 시그니처: 영수증 번호(ID) 자동 증가 로직
+        // 영수증 번호(ID) 자동 증가 로직
         long maxId = 0L;
         for (Order o : allOrders) {
             if (o.getOrderID() > maxId) {
@@ -45,7 +45,7 @@ public class OrderService {
         // 창고 리스트에 넣고
         allOrders.add(newOrder);
 
-        // 파일에 덮어쓰기!
+        // 파일에 덮어쓰기
         orderRepository.saveAll(allOrders);
     }
 }

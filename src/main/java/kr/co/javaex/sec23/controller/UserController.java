@@ -111,7 +111,7 @@ public class UserController {
 
     /**
      * 비밀번호 수정
-     * 기존 비밀번호 확인 후 변경ㄹ
+     * 기존 비밀번호 확인 후 변경
      */
     public void updatePw(User currentUser) {
         System.out.println("\n=========== 비밀번호 변경 ===========");
@@ -156,7 +156,7 @@ public class UserController {
             return;
         }
 
-        // 향상된 for문으로 유저 정보 출력
+        // 유저 정보 출력
         for (User u : users) {
             System.out.printf("%s\t| %s\t| %s\t| %s\t| %s\t| %s\n",
                     u.getUserID(),
