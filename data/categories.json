@@ -1,4 +1,11 @@
-[ {
+[
+  {
+    "categoryID": 0,
+    "topCategoryID": null,
+    "categoryName": "미분류",
+    "sortOrder": 0
+  },
+  {
   "categoryID" : 1,
   "topCategoryID" : null,
   "categoryName" : "킥보드",

@@ -1,7 +1,13 @@
 [ {
   "cartID" : 1,
-  "userID" : "user01",
+  "userID" : "user001",
+  "productID" : 2001,
+  "quantity" : 30,
+  "checked" : false
+}, {
+  "cartID" : 2,
+  "userID" : "user001",
   "productID" : 2004,
-  "quantity" : 500,
+  "quantity" : 2,
   "checked" : true
 } ]

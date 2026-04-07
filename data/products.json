@@ -36,7 +36,7 @@
   "productName" : "덱 헤슘 프로 흑축",
   "productDescription" : "단단한 하우징과 묵직한 키압, 매니아를 위한 선택",
   "productPrice" : 180000,
-  "productStock" : 8,
+  "productStock" : 3,
   "productStatus" : "ACTIVE"
 }, {
   "categoryID" : 102,
@@ -68,7 +68,7 @@
   "productName" : "닌자 7878 베어본",
   "productDescription" : "수정한 설명입니다.",
   "productPrice" : 30,
-  "productStock" : 10,
+  "productStock" : 5,
   "productStatus" : "ACTIVE"
 }, {
   "categoryID" : 102,
@@ -108,7 +108,7 @@
   "productName" : "체리 정품 프로파일 PBT 키캡 세트 (블랙)",
   "productDescription" : "심플이 베스트. 번들거림 없는 뽀송뽀송한 촉감",
   "productPrice" : 38000,
-  "productStock" : 45,
+  "productStock" : 33,
   "productStatus" : "ACTIVE"
 }, {
   "categoryID" : 201,

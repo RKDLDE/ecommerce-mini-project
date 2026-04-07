@@ -1,1 +1,22 @@
-[]
+[ {
+  "orderID" : 1,
+  "userID" : "user001",
+  "productID" : 2004,
+  "quantity" : 12,
+  "paymentPrice" : 456000,
+  "orderDate" : "2026-04-07 22:31:43"
+}, {
+  "orderID" : 2,
+  "userID" : "user001",
+  "productID" : 1009,
+  "quantity" : 5,
+  "paymentPrice" : 150,
+  "orderDate" : "2026-04-07 22:31:43"
+}, {
+  "orderID" : 3,
+  "userID" : "user001",
+  "productID" : 1005,
+  "quantity" : 5,
+  "paymentPrice" : 900000,
+  "orderDate" : "2026-04-07 22:31:43"
+} ]

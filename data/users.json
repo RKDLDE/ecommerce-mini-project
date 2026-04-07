@@ -7,15 +7,15 @@
   "userStatus" : "ENABLE",
   "userAuth" : "ADMIN"
 }, {
-  "userID" : "user01",
+  "userID" : "user001",
   "userName" : "이상혁",
-  "userPW" : "Uswer0101",
+  "userPW" : "User001",
   "userPhoneNumber" : "010-1111-2222",
   "userEmail" : "shlee@test.com",
   "userStatus" : "ENABLE",
   "userAuth" : "USER"
 }, {
-  "userID" : "user02",
+  "userID" : "user002",
   "userName" : "김부연",
   "userPW" : "User1234",
   "userPhoneNumber" : "010-3333-4444",
@@ -23,7 +23,7 @@
   "userStatus" : "ENABLE",
   "userAuth" : "USER"
 }, {
-  "userID" : "user03",
+  "userID" : "user003",
   "userName" : "김희주",
   "userPW" : "User1234",
   "userPhoneNumber" : "010-5555-6666",
@@ -31,7 +31,7 @@
   "userStatus" : "ENABLE",
   "userAuth" : "USER"
 }, {
-  "userID" : "user04",
+  "userID" : "user004",
   "userName" : "테스터일",
   "userPW" : "User1234",
   "userPhoneNumber" : "010-7777-8888",
@@ -39,19 +39,11 @@
   "userStatus" : "ENABLE",
   "userAuth" : "USER"
 }, {
-  "userID" : "user05",
+  "userID" : "user005",
   "userName" : "테스터이",
   "userPW" : "User1234",
   "userPhoneNumber" : "010-9999-0000",
   "userEmail" : "test2@test.com",
   "userStatus" : "ENABLE",
   "userAuth" : "USER"
-}, {
-  "userID" : "user004",
-  "userName" : "캭",
-  "userPW" : "A123asd",
-  "userPhoneNumber" : "23",
-  "userEmail" : "ㄴㅇㄹ",
-  "userStatus" : "ENABLE",
-  "userAuth" : "USER"
-} ]
+}]
