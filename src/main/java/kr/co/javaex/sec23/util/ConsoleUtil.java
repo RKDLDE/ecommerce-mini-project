@@ -26,8 +26,26 @@ public class ConsoleUtil {
         while (!scanner.hasNextInt()) {
             System.out.println("숫자만 입력해주세요.");
             scanner.next();
+            System.out.print(message);
         }
         int input = scanner.nextInt();
+        scanner.nextLine();
+        return input;
+    }
+
+    /**
+     * 숫자 입력 (버퍼 제거) - Long 전용
+     *  @param message
+     *  @return input
+     */
+    public static long readLong(String message) {
+        System.out.print(message);
+        while (!scanner.hasNextInt()) {
+            System.out.println("숫자만 입력해주세요.");
+            scanner.next();
+            System.out.print(message);
+        }
+        long input = scanner.nextLong();
         scanner.nextLine();
         return input;
     }
