@@ -1,7 +1,7 @@
 [
   {
-    "productID": "P1001",
-    "categoryID": "C101",
+    "productID": 1001,
+    "categoryID": 101,
     "productName": "해피해킹(HHKB) 프로페셔널",
     "productDescription": "개발자의 영혼을 달래주는 무접점 키보드, 타건감 예술",
     "productPrice": 380000,
@@ -9,8 +9,8 @@
     "productStatus": "ACTIVE"
   },
   {
-    "productID": "P1002",
-    "categoryID": "C101",
+    "productID": 1002,
+    "categoryID": 101,
     "productName": "키크론 Q1 Pro 풀알루미늄",
     "productDescription": "맥/윈도우 완벽 호환, 묵직한 노브(Knob) 폼 미쳤다",
     "productPrice": 240000,
@@ -18,8 +18,35 @@
     "productStatus": "ACTIVE"
   },
   {
-    "productID": "P1003",
-    "categoryID": "C101",
+    "productID": 1003,
+    "categoryID": 101,
+    "productName": "레오폴드 FC900R 청축",
+    "productDescription": "사무실에서 쓰면 팀장님한테 등짝 맞는 경쾌한 클릭음",
+    "productPrice": 145000,
+    "productStock": 0,
+    "productStatus": "DEACTIVATED"
+  },
+  {
+    "productID": 1004,
+    "categoryID": 101,
+    "productName": "리얼포스 R3 무접점",
+    "productDescription": "구름 위를 걷는 듯한 부드러운 타건감의 끝판왕",
+    "productPrice": 360000,
+    "productStock": 15,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 1005,
+    "categoryID": 101,
+    "productName": "덱 헤슘 프로 흑축",
+    "productDescription": "단단한 하우징과 묵직한 키압, 매니아를 위한 선택",
+    "productPrice": 180000,
+    "productStock": 8,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 1006,
+    "categoryID": 102,
     "productName": "도은 커스텀 텐키리스 (도은-87)",
     "productDescription": "직접 풀윤활한 특주축 탑재, 타건음 ASMR 그 자체",
     "productPrice": 420000,
@@ -27,8 +54,8 @@
     "productStatus": "ACTIVE"
   },
   {
-    "productID": "P1004",
-    "categoryID": "C101",
+    "productID": 1007,
+    "categoryID": 102,
     "productName": "PIZZA 에디션 65% 베어본",
     "productDescription": "피자 만들다 빡쳐서(?) 만든 한정판 핫스왑 키보드",
     "productPrice": 280000,
@@ -36,12 +63,75 @@
     "productStatus": "ACTIVE"
   },
   {
-    "productID": "P1005",
-    "categoryID": "C101",
-    "productName": "레오폴드 FC900R 청축",
-    "productDescription": "사무실에서 쓰면 팀장님한테 등짝 맞는 경쾌한 클릭음",
-    "productPrice": 145000,
+    "productID": 1008,
+    "categoryID": 102,
+    "productName": "글로리어스 GMMK Pro (글족)",
+    "productDescription": "커스텀 입문자들의 영원한 친구, 75% 배열 베어본",
+    "productPrice": 230000,
+    "productStock": 12,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 1009,
+    "categoryID": 102,
+    "productName": "몬스타기어 닌자87 베어본",
+    "productDescription": "가성비 넘치는 텐키리스 핫스왑 입문 기기",
+    "productPrice": 65000,
+    "productStock": 50,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 1010,
+    "categoryID": 102,
+    "productName": "ZOOM65 V2 에센셜 킷",
+    "productDescription": "아름다운 디자인과 뛰어난 가스켓 구조의 베어본",
+    "productPrice": 290000,
     "productStock": 0,
     "productStatus": "DEACTIVATED"
+  },
+  {
+    "productID": 2001,
+    "categoryID": 201,
+    "productName": "GMK 올리비아 (Olivia) 복각 키캡",
+    "productDescription": "핑크와 블랙의 완벽한 조화, 체리 프로파일 PBT 이중사출",
+    "productPrice": 45000,
+    "productStock": 30,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 2002,
+    "categoryID": 201,
+    "productName": "공복이 저소음 특주축 90pcs",
+    "productDescription": "새벽 코딩 시 마음의 평화를 찾아주는 완벽한 무소음 스위치",
+    "productPrice": 55000,
+    "productStock": 100,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 2003,
+    "categoryID": 201,
+    "productName": "게이트론 우유뚜껑 황축 프로 90pcs",
+    "productDescription": "국밥 스위치! 공장 윤활 처리로 부드러운 리니어 타건감",
+    "productPrice": 32000,
+    "productStock": 200,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 2004,
+    "categoryID": 201,
+    "productName": "체리 정품 프로파일 PBT 키캡 세트 (블랙)",
+    "productDescription": "심플이 베스트. 번들거림 없는 뽀송뽀송한 촉감",
+    "productPrice": 38000,
+    "productStock": 45,
+    "productStatus": "ACTIVE"
+  },
+  {
+    "productID": 2005,
+    "categoryID": 201,
+    "productName": "크라이톡스 105+205 풀윤활 키트",
+    "productDescription": "스프링 소음과 서걱임을 잡아줄 윤활유와 붓 세트",
+    "productPrice": 18000,
+    "productStock": 80,
+    "productStatus": "ACTIVE"
   }
 ]

@@ -1,32 +1,31 @@
-[
-  {
-    "categoryID": "C001",
-    "topCategoryID": null,
-    "categoryName": "키보드",
-    "sortOrder": 1
-  },
-  {
-    "categoryID": "C002",
-    "topCategoryID": null,
-    "categoryName": "액세서리",
-    "sortOrder": 2
-  },
-  {
-    "categoryID": "C101",
-    "topCategoryID": "C001",
-    "categoryName": "무접점/기계식",
-    "sortOrder": 1
-  },
-  {
-    "categoryID": "C102",
-    "topCategoryID": "C001",
-    "categoryName": "커스텀/베어본",
-    "sortOrder": 2
-  },
-  {
-    "categoryID": "C201",
-    "topCategoryID": "C002",
-    "categoryName": "키캡/스위치",
-    "sortOrder": 1
-  }
-]
+[ {
+  "categoryID" : 1,
+  "topCategoryID" : null,
+  "categoryName" : "킥보드",
+  "sortOrder" : 1
+}, {
+  "categoryID" : 2,
+  "topCategoryID" : null,
+  "categoryName" : "액세서리",
+  "sortOrder" : 2
+}, {
+  "categoryID" : 101,
+  "topCategoryID" : 1,
+  "categoryName" : "기계식/무접점",
+  "sortOrder" : 1
+}, {
+  "categoryID" : 102,
+  "topCategoryID" : 1,
+  "categoryName" : "커스텀/베어본",
+  "sortOrder" : 2
+}, {
+  "categoryID" : 201,
+  "topCategoryID" : 2,
+  "categoryName" : "키캡/스위치",
+  "sortOrder" : 1
+}, {
+  "categoryID" : 202,
+  "topCategoryID" : 2,
+  "categoryName" : "하이",
+  "sortOrder" : 4
+} ]
