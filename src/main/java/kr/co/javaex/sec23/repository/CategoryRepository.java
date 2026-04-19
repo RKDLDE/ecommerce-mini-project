@@ -2,54 +2,144 @@ package kr.co.javaex.sec23.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.javaex.sec23.domain.Category;
+import kr.co.javaex.sec23.util.DbConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CategoryRepository {
-    // jackson 라이브러리
-    private ObjectMapper mapper = new ObjectMapper();
-
-    // 파일 불러오기
-    private final String FILE_PATH = "data/categories.json";
-
 
     /**
      * 기존 상품 목록을 가져오는 메서드
-     * @return ArrayList<>() 형태의 상품 목록
      */
     public List<Category> findAll() {
-        File file = new File(FILE_PATH);
+        List<Category> categories = new ArrayList<>();
+        // 대분류 정렬 다음은 중분류 정렬대로
+        String sql = "SELECT * FROM categories ORDER BY category_top_id NULLS FIRST, category_sort ASC";
 
-        // 파일이 존재하지 않으면 빈 배열 반환
-        if (!file.exists()) {
-            return new ArrayList<>();
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Long topId = rs.getLong("category_top_id");
+                if (rs.wasNull()) {
+                    topId = null; // DB의 NULL -> null로 바꿔야 한다네유..
+                }
+
+                Category category = new Category(
+                        rs.getLong("category_id"),
+                        rs.getString("category_name"),
+                        rs.getLong("category_sort"),
+                        topId
+                );
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        // 존재한다면
-        try {
-            // Categories를 담는 배열 초기화
-            Category[] categories = mapper.readValue(file, Category[].class);
-            // arraylist 형태로 반환
-            return new ArrayList<>(Arrays.asList(categories));
-        } catch (IOException e) {
-            // 파일 읽기 오류 시 출력 -> 빈 배열 반환
-            System.out.println("파일 읽기 오류: " + e.getMessage());
-            return new ArrayList<>();
+        return categories;
+    }
+
+    /**
+     * 카테고리 추가
+     */
+    public void save(String name, Long topId, int sortOrder) {
+        String sql = "INSERT INTO categories (category_name, category_sort, category_top_id) VALUES (?, ?, ?)";
+
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, name);
+            pstmt.setInt(2, sortOrder);
+
+            if (topId == null) { // 대분류라면
+                pstmt.setNull(3, Types.NUMERIC);
+            } else { // 중분류라면
+                pstmt.setLong(3, topId);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * 새로운 categories 배열을 파일에 저장
-     * @param categories
+     * 카테고리 조회...
      */
-    public void saveAll(List<Category> categories){
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), categories);
-        } catch (IOException e) {
-            System.out.println("파일 저장 오류: " + e.getMessage());
+    public Category findById(Long categoryId) {
+        String sql = "SELECT * FROM categories WHERE category_id = ?";
+
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, categoryId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Long topId = rs.getLong("category_top_id");
+                if (rs.wasNull()) topId = null;
+                return new Category(
+                        rs.getLong("category_id"), rs.getString("category_name"),
+                        rs.getLong("category_sort"), topId
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 카테고리 수정
+     */
+    public boolean update(Long categoryId, String newName, int newSortOrder) {
+        String sql = "UPDATE categories SET category_name = ?, category_sort = ? WHERE category_id = ?";
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, newName);
+            pstmt.setInt(2, newSortOrder);
+            pstmt.setLong(3, categoryId);
+            return pstmt.executeUpdate() > 0; // 업데이트 성공 여부 반환
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 하위 카테고리 개수 세기
+     */
+    public int countByTopId(Long topId) {
+        String sql = "SELECT COUNT(*) FROM categories WHERE category_top_id = ?";
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, topId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 카테고리 삭제
+     */
+    public void deleteById(Long categoryId) {
+        String sql = "DELETE FROM categories WHERE category_id = ?";
+        try (Connection conn = DbConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, categoryId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

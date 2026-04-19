@@ -55,12 +55,12 @@ public class CategoryController {
 
         for (Category c : categories) {
             // 대분류 먼저 출력
-            if (c.getTopCategoryID() == null) {
-                System.out.println("[대분류] ID: " + c.getCategoryID() + " | 이름: " + c.getCategoryName() + " | 정렬: " + c.getSortOrder());
+            if (c.getCategoryTopId() == null) {
+                System.out.println("[대분류] ID: " + c.getCategoryId() + " | 이름: " + c.getCategoryName() + " | 정렬: " + c.getCategorySort());
                 // 해당 대분류의 중분류
                 for (Category sub : categories) {
-                    if (sub.getTopCategoryID() != null && sub.getTopCategoryID().equals(c.getCategoryID())) {
-                        System.out.println("  ㄴ [중분류] ID: " + sub.getCategoryID() + " | 상위ID: " + sub.getTopCategoryID() + " | 상위카테고리: " + c.getCategoryName() + " | 이름: " + sub.getCategoryName());
+                    if (sub.getCategoryTopId() != null && sub.getCategoryTopId().equals(c.getCategoryId())) {
+                        System.out.println("  ㄴ [중분류] ID: " + sub.getCategoryId() + " | 상위ID: " + sub.getCategoryTopId() + " | 상위카테고리: " + c.getCategoryName() + " | 이름: " + sub.getCategoryName());
                     }
                 }
             }
@@ -156,8 +156,8 @@ public class CategoryController {
         boolean hasTopCategory = false;
 
         for (Category c : categories) {
-            if (c.getTopCategoryID() == null) {
-                System.out.println("ID: " + c.getCategoryID() + " | 이름: " + c.getCategoryName());
+            if (c.getCategoryTopId() == null) {
+                System.out.println("ID: " + c.getCategoryId() + " | 이름: " + c.getCategoryName());
                 hasTopCategory = true;
             }
         }
