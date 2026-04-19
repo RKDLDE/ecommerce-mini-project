@@ -1,6 +1,7 @@
 package kr.co.javaex.sec23.controller;
 
 import kr.co.javaex.sec23.domain.Cart;
+import kr.co.javaex.sec23.domain.CartItem;
 import kr.co.javaex.sec23.domain.Product;
 import kr.co.javaex.sec23.domain.User;
 import kr.co.javaex.sec23.service.CartService;
@@ -8,6 +9,7 @@ import kr.co.javaex.sec23.service.OrderService;
 import kr.co.javaex.sec23.service.ProductService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,40 +63,38 @@ public class CartController {
         System.out.println("선택\t| 번호\t| 상품명\t\t\t\t\t\t\t| 수량\t| 단가\t\t| 총액");
         System.out.println("=============================================================================================");
 
-        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
-
+        List<CartItem> cartItems = cartService.getMyCartItems(loginUser.getUserId());
         // 비어있으면
-        if (carts.isEmpty()) {
+        if (cartItems.isEmpty()) {
             System.out.println("장바구니가 비어있습니다.");
             System.out.println("=============================================================================================");
             return;
         }
 
-        int totalCheckedPrice = 0;
+        BigDecimal totalCheckedPrice = BigDecimal.ZERO;
 
-        for (Cart cart : carts) {
-            Product product = productService.getProduct(cart.getProductID());
+        for (CartItem item: cartItems) {
+            Product product = productService.getProduct(item.getProductId());
 
             if (product != null) {
-                int itemTotal = product.getProductPrice() * cart.getQuantity();
-                String checkMark = cart.isChecked() ? "[ V ]" : "[   ]";
+                BigDecimal itemTotal = product.getProductPrice().multiply(BigDecimal.valueOf(item.getCartQuantity()));                String checkMark = item.getChecked() ? "[ V ]" : "[   ]";
 
                 // 체크된 상품 총액 계산
-                if (cart.isChecked()) {
-                    totalCheckedPrice += itemTotal;
+                if (item.getChecked()) {
+                    totalCheckedPrice = totalCheckedPrice.add(itemTotal);
                 }
 
                 System.out.printf("%s\t| %d\t| %s\t| %d개\t| %,d원\t| %,d원\n",
                         checkMark,
-                        cart.getCartID(),
+                        item.getCartItemId(),
                         product.getProductName(),
-                        cart.getQuantity(),
-                        product.getProductPrice(),
-                        itemTotal);
+                        item.getCartQuantity(),
+                        product.getProductPrice().longValue(),
+                        itemTotal.longValue());
             }
         }
         System.out.println("=============================================================================================");
-        System.out.printf("현재 선택된 상품 총 결제 예정 금액: %,d원\n", totalCheckedPrice);
+        System.out.printf("현재 선택된 상품 총 결제 예정 금액: %,d원\n", totalCheckedPrice.longValue());
         System.out.println("=============================================================================================\n");
     }
 
@@ -103,8 +103,8 @@ public class CartController {
      */
     private void toggleCartItem(User loginUser) {
         printCart(loginUser);
-        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
-        if (carts.isEmpty()) return;
+        List<CartItem> cartItems = cartService.getMyCartItems(loginUser.getUserId());
+        if (cartItems.isEmpty()) return;
 
         long targetId = consoleUtil.readLong("선택 상태를 변경할 장바구니 번호 입력 (0: 취소): ");
         if (targetId == 0) return;
@@ -123,51 +123,51 @@ public class CartController {
     private void orderCheckedItems(User loginUser) {
         printCart(loginUser);
 
-        List<Cart> myCarts = cartService.getMyCart(loginUser.getUserID());
-        List<Cart> checkedCarts = new ArrayList<>();
-        int totalOrderPrice = 0;
+        List<CartItem> myCartItems = cartService.getMyCartItems(loginUser.getUserId());
+        List<CartItem> checkedItems = new ArrayList<>();
+        BigDecimal totalOrderPrice = BigDecimal.ZERO;
 
         // 체크된 상품 가져오기
-        for (Cart cart : myCarts) {
-            if (cart.isChecked()) {
-                checkedCarts.add(cart);
+        for (CartItem item : myCartItems) {
+            if (item.getChecked()) {
+                checkedItems.add(item);
             }
         }
 
         // 체크 안했으면
-        if (checkedCarts.isEmpty()) {
+        if (checkedItems.isEmpty()) {
             System.out.println("선택된 상품이 없습니다. 먼저 결제할 상품을 체크해주세요.");
             return;
         }
 
         // 재고 확인
-        for (Cart cart : checkedCarts) {
-            Product product = productService.getProduct(cart.getProductID());
-            if (cart.getQuantity() > product.getProductStock()) {
+        for (CartItem item : checkedItems) {
+            Product product = productService.getProduct(item.getProductId());
+            if (item.getCartQuantity() > product.getProductStock()) {
                 System.out.println("[" + product.getProductName() + "] 상품의 재고가 부족하여 결제를 진행할 수 없습니다.");
                 return;
             }
-            totalOrderPrice += product.getProductPrice() * cart.getQuantity();
+            BigDecimal itemTotal = product.getProductPrice().multiply(BigDecimal.valueOf(item.getCartQuantity()));
+            totalOrderPrice = totalOrderPrice.add(itemTotal);
         }
 
         // 결제 확인
-        System.out.printf("선택하신 %d개 상품의 총 결제 금액은 [%,d원] 입니다.\n", checkedCarts.size(), totalOrderPrice);
         String confirm = consoleUtil.readString("정말 결제하시겠습니까? (Y/N): ");
 
         if (confirm.equalsIgnoreCase("Y")) {
-            for (Cart cart : checkedCarts) {
-                Product product = productService.getProduct(cart.getProductID());
+            for (CartItem item : checkedItems) {
+                Product product = productService.getProduct(item.getProductId());
 
                 // 재고 차감
-                product.setProductStock(product.getProductStock() - cart.getQuantity());
+                product.setProductStock(product.getProductStock() - item.getCartQuantity());
                 productService.updateProduct(product);
 
                 // 영수증 생성
-                int itemTotal = product.getProductPrice() * cart.getQuantity();
-                orderService.addOrder(loginUser.getUserID(), product.getProductID(), cart.getQuantity(), itemTotal);
+                BigDecimal itemTotal = product.getProductPrice().multiply(BigDecimal.valueOf(item.getCartQuantity()));
+                orderService.addOrder(loginUser.getUserId(), product.getProductId(), item.getCartQuantity(), itemTotal);
 
                 // 장바구니 삭제
-                cartService.deleteItem(cart.getCartID());
+                cartService.deleteCartItem(item.getCartId());
             }
 
             System.out.println("선택하신 상품의 결제가 완료되었습니다.");
@@ -182,25 +182,25 @@ public class CartController {
     private void updateCartQuantity(User loginUser) {
         printCart(loginUser);
 
-        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
-        if (carts.isEmpty()) return;
+        List<CartItem> cartItems = cartService.getMyCartItems(loginUser.getUserId());
+        if (cartItems.isEmpty()) return;
 
         long targetId = consoleUtil.readLong("수량을 변경할 장바구니 ID 입력: ");
 
-        Cart targetCart = null;
-        for (Cart cart : carts) {
-            if (cart.getCartID().equals(targetId)) {
-                targetCart = cart;
+        CartItem targetItem = null;
+        for (CartItem item : cartItems) {
+            if (item.getCartItemId().equals(targetId)) {
+                targetItem = item;
                 break;
             }
         }
 
-        if (targetCart == null) {
+        if (targetItem == null) {
             System.out.println("해당하는 상품이 없습니다.");
             return;
         }
 
-        int newQuantity = consoleUtil.readInt("변경할 수량 입력: ");
+        long newQuantity = consoleUtil.readLong("변경할 수량 입력: ");
 
         // 수량 유효성 검사
         if (newQuantity <= 0) {
@@ -209,7 +209,7 @@ public class CartController {
         }
 
         // 재고 확인
-        Product product = productService.getProduct(targetCart.getProductID());
+        Product product = productService.getProduct(targetItem.getProductId());
         if (newQuantity > product.getProductStock()) {
             System.out.println("남은 재고가 부족합니다. (현재 재고: " + product.getProductStock() + "개)");
             return;
@@ -230,14 +230,14 @@ public class CartController {
     private void deleteCartItem(User loginUser) {
         printCart(loginUser);
 
-        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
-        if (carts.isEmpty()) return;
+        List<CartItem> cartItems = cartService.getMyCartItems(loginUser.getUserId());
+        if (cartItems.isEmpty()) return;
 
         long targetId = consoleUtil.readLong("삭제할 장바구니 ID 입력: ");
 
         String confirm = consoleUtil.readString("정말 삭제하시겠습니까? (Y/N): ");
         if (confirm.equalsIgnoreCase("Y")) {
-            boolean isDeleted = cartService.deleteItem(targetId);
+            boolean isDeleted = cartService.deleteCartItem(targetId);
             if (isDeleted) {
                 System.out.println("장바구니에서 상품이 삭제되었습니다.");
             } else {
@@ -252,16 +252,16 @@ public class CartController {
      * 장바구니 전체 비우기
      */
     private void clearCart(User loginUser) {
-        List<Cart> carts = cartService.getMyCart(loginUser.getUserID());
+        List<CartItem> cartItems = cartService.getMyCartItems(loginUser.getUserId());
 
-        if (carts.isEmpty()) {
+        if (cartItems.isEmpty()) {
             System.out.println("장바구니가 이미 비어있습니다.");
             return;
         }
 
         String confirm = consoleUtil.readString("장바구니를 모두 비우시겠습니까? (Y/N): ");
         if (confirm.equalsIgnoreCase("Y")) {
-            cartService.clearCart(loginUser.getUserID());
+            cartService.clearCart(loginUser.getUserId());
             System.out.println("장바구니가 완전히 비워졌습니다.");
         } else {
             System.out.println("비우기가 취소되었습니다.");
