@@ -11,6 +11,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+*.iml
+*.idea
 # DB 설정 파일 제외
 src/main/resources/db.properties
 
