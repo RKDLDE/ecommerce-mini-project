@@ -1,9 +1,9 @@
 package kr.co.javaex.sec23.service;
 
 import kr.co.javaex.sec23.domain.Product;
-import kr.co.javaex.sec23.domain.ProductStatus;
 import kr.co.javaex.sec23.repository.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductService {
@@ -21,121 +21,43 @@ public class ProductService {
      * .해당 ID가 존재하는지
      */
     public boolean isProductID(long targetId) {
-        List<Product> allProducts = productRepository.findAll();
-        boolean isFound = false;
-
-        for(Product product : allProducts){
-            if(product.getProductID().equals(targetId)){
-                isFound = true;
-                break;
-            }
-        }
-        return isFound;
+        return productRepository.findById(targetId) != null;
     }
 
     /**
      * 해당 객체 가져오기
      */
     public Product getProduct(long targetId) {
-        List<Product> allProducts = productRepository.findAll();
-
-        for(Product product : allProducts){
-            if(product.getProductID().equals(targetId)){
-                return product;
-            }
-        }
-        return null;
+        return productRepository.findById(targetId);
     }
 
     /**
      * 덮어쓰기
      */
     public boolean updateProduct(Product targetProduct) {
-        List<Product> allProducts = productRepository.findAll();
-        boolean isUpdated = false;
-
-        for (Product product : allProducts) {
-            if (product.getProductID().equals(targetProduct.getProductID())) {
-                int index = allProducts.indexOf(product);
-
-                allProducts.set(index, targetProduct);
-                isUpdated = true;
-                break;
-            }
-        }
-
-        if (isUpdated) {
-            productRepository.saveAll(allProducts);
-        }
-        return isUpdated;
+        return productRepository.update(targetProduct);
     }
 
     /**
      * 상품 추가
      */
-    public void addProduct(Long categoryId, String productName, String productDescription, int productPrice, int productStock) {
-        List<Product> allProducts = productRepository.findAll();
+    public void addProduct(Long categoryId, String productName, String productDesc, BigDecimal productPrice, Long productStock) {
+        Product newProduct = new Product(null, productName, productDesc, productPrice, productStock, true, categoryId);
 
-        // ID 자동 증가
-        long maxId = 0L;
-
-        // 가장 큰 값 찾아서
-        for (Product p : allProducts) {
-            if (p.getProductID() > maxId) {
-                maxId = p.getProductID();
-            }
-        }
-        // + 1하기
-        long nextId = maxId + 1L;
-
-        Product newProduct = new Product(categoryId, nextId, productName, productDescription, productPrice, productStock, ProductStatus.ACTIVE);
-
-        // 추가하고
-        allProducts.add(newProduct);
-        // 덮어쓰기
-        productRepository.saveAll(allProducts);
+        productRepository.save(newProduct);
     }
 
     /**
      * 상품 삭제
      */
     public boolean deleteProduct(Long targetId) {
-        List<Product> allProducts = productRepository.findAll();
-        boolean isRemoved = false;
-
-        for (Product product : allProducts) {
-            if (product.getProductID().equals(targetId)) {
-
-                int index = allProducts.indexOf(product);
-                allProducts.remove(index);
-                isRemoved = true;
-                break;
-            }
-        }
-
-        if (isRemoved) {
-            productRepository.saveAll(allProducts);
-        }
-
-        return isRemoved;
+        return productRepository.deleteById(targetId);
     }
 
     /**
      * 삭제되는 카테고리의 상품들을 미분류(0)로 이동
      */
     public void moveProductsToDefault(Long categoryId) {
-        List<Product> allProducts = productRepository.findAll();
-        boolean isChanged = false;
-
-        for (Product p : allProducts) {
-            if (p.getCategoryID().equals(categoryId)) {
-                p.setCategoryID(0L); // 0번을 '미분류'로 약속
-                isChanged = true;
-            }
-        }
-
-        if (isChanged) {
-            productRepository.saveAll(allProducts);
-        }
+        productRepository.updateCategoryToDefault(categoryId, 1L); // DB상 미분류는 1..
     }
 }

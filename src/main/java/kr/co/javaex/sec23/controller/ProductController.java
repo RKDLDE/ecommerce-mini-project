@@ -2,13 +2,13 @@ package kr.co.javaex.sec23.controller;
 
 import kr.co.javaex.sec23.domain.Category;
 import kr.co.javaex.sec23.domain.Product;
-import kr.co.javaex.sec23.domain.ProductStatus;
 import kr.co.javaex.sec23.domain.User;
 import kr.co.javaex.sec23.service.CartService;
 import kr.co.javaex.sec23.service.CategoryService;
 import kr.co.javaex.sec23.service.ProductService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductController {
@@ -37,12 +37,13 @@ public class ProductController {
         // 활성화된 상품만 출력
         for(Category category : categories){
             for(Product product : products){
-                if(product.getCategoryID().equals(category.getCategoryID())){
-                    if(product.getProductStatus() == ProductStatus.ACTIVE){
-                        System.out.printf("%d\t| %s\t| %s\n",
-                                product.getProductID(),
+                if(product.getCategoryId().equals(category.getCategoryId())){
+                    if(product.getActive()){
+                        System.out.printf("%d\t| %s\t|%s\t| %,d원\n",
+                                product.getProductId(),
                                 category.getCategoryName(),
-                                product.getProductName());
+                                product.getProductName(),
+                                product.getProductPrice().longValue());
                     }
                 }
             }
@@ -69,12 +70,13 @@ public class ProductController {
 
         for(Category category : categories){
             for(Product product : products){
-                if(product.getCategoryID().equals(category.getCategoryID())){
+                if(product.getCategoryId().equals(category.getCategoryId())){
+                    String statusStr = product.getActive() ? "판매중" : "판매중지";
                         System.out.printf("%d\t| %s\t| %s\t| %s\n",
-                                product.getProductID(),
+                                product.getProductId(),
                                 category.getCategoryName(),
                                 product.getProductName(),
-                                product.getProductStatus());
+                                statusStr);
                     }
                 }
             }
@@ -85,13 +87,13 @@ public class ProductController {
      */
     private void printProductDetail(Product product) {
         System.out.println("\n======================== 상품 상세 정보 ========================");
-        System.out.println("상품번호 : " + product.getProductID());
+        System.out.println("상품번호 : " + product.getProductId());
         System.out.println("상품명 : " + product.getProductName());
-        System.out.println("가격 : " + product.getProductPrice() + "원");
+        System.out.println("가격 : " + product.getProductPrice().longValue() + "원");
         System.out.println("남은재고 : " + product.getProductStock() + "개");
-        System.out.println("상태값 : " + (product.getProductStatus() == ProductStatus.ACTIVE ? "판매중" : "판매중지"));
+        System.out.println("상태값 : " + (product.getActive() ? "판매중" : "판매중지"));
         System.out.println("=================================================================");
-        System.out.println(product.getProductDescription());
+        System.out.println(product.getProductDesc());
         System.out.println("=================================================================\n");
     }
 
@@ -131,12 +133,12 @@ public class ProductController {
      * 장바구니 담기
      */
     private void addToCart(User loginUser, Product product) {
-        if (product.getProductStatus() != ProductStatus.ACTIVE) {
+        if (!product.getActive()) {
             System.out.println("현재 판매가 중지된 상품입니다.");
             return;
         }
 
-        int quantity = consoleUtil.readInt("몇 개를 담으시겠습니까? : ");
+        long quantity = consoleUtil.readLong("몇 개를 담으시겠습니까? : ");
 
         if (quantity <= 0) {
             System.out.println("수량은 1개 이상이어야 합니다.");
@@ -148,7 +150,7 @@ public class ProductController {
             return;
         }
 
-        cartService.addCart(loginUser.getUserID(), product.getProductID(), quantity);
+        cartService.addCart(loginUser.getUserId(), product.getProductId(), quantity);
         System.out.println("[" + product.getProductName() + "] " + quantity + "개가 장바구니에 성공적으로 담겼습니다.");
     }
     /**
@@ -215,16 +217,16 @@ public class ProductController {
                     break;
                 case 2:
                     String newDesc = consoleUtil.readString("바꿀 상품 설명 입력: ");
-                    targetProduct.setProductDescription(newDesc);
+                    targetProduct.setProductDesc(newDesc);
                     System.out.println("상품 설명이 변경되었습니다.");
                     break;
                 case 3:
-                    int newPrice = consoleUtil.readInt("바꿀 가격 입력: ");
-                    targetProduct.setProductPrice(newPrice);
+                    long newPrice = consoleUtil.readLong("바꿀 가격 입력: ");
+                    targetProduct.setProductPrice(BigDecimal.valueOf(newPrice));
                     System.out.println("가격이 변경되었습니다.");
                     break;
                 case 4:
-                    int newStock = consoleUtil.readInt("바꿀 재고 입력: ");
+                    long newStock = consoleUtil.readLong("바꿀 재고 입력: ");
                     targetProduct.setProductStock(newStock);
                     System.out.println("재고가 변경되었습니다.");
                     break;
@@ -232,10 +234,10 @@ public class ProductController {
                     System.out.println("1. 판매중(ACTIVE) | 2. 판매중지(DEACTIVATED)");
                     int statusChoice = consoleUtil.readInt("상태 선택: ");
                     if (statusChoice == 1) {
-                        targetProduct.setProductStatus(ProductStatus.ACTIVE);
+                        targetProduct.setActive(true);
                         System.out.println("상태가 판매중으로 변경되었습니다.");
                     } else if (statusChoice == 2) {
-                        targetProduct.setProductStatus(ProductStatus.DEACTIVATED);
+                        targetProduct.setActive(false);
                         System.out.println("상태가 판매중지로 변경되었습니다.");
                     } else {
                         System.out.println("잘못된 입력입니다.");
@@ -270,7 +272,7 @@ public class ProductController {
 
             System.out.println("\n[ 등록 가능한 카테고리 목록 ]");
             for (Category c : categories) {
-                System.out.println("ID: " + c.getCategoryID() + " | 카테고리명: " + c.getCategoryName());
+                System.out.println("ID: " + c.getCategoryId() + " | 카테고리명: " + c.getCategoryName());
             }
 
             // 카테고리 입력
@@ -287,10 +289,10 @@ public class ProductController {
             // 상품 정보 입력
             String productName = consoleUtil.readString("상품명: ");
             String productDescription = consoleUtil.readString("상품 설명: ");
-            int productPrice = consoleUtil.readInt("가격: ");
-            int productStock = consoleUtil.readInt("재고: ");
+            long productPrice = consoleUtil.readLong("가격: ");
+            long productStock = consoleUtil.readLong("재고: ");
 
-            productService.addProduct(categoryId, productName, productDescription, productPrice, productStock);
+            productService.addProduct(categoryId, productName, productDescription, BigDecimal.valueOf(productPrice), productStock);
             System.out.println("새 상품이 성공적으로 추가되었습니다!");
         }
 
