@@ -1,18 +1,15 @@
 package kr.co.javaex.sec23.controller;
 
 import kr.co.javaex.sec23.domain.User;
-import kr.co.javaex.sec23.domain.UserAuth;
-import kr.co.javaex.sec23.domain.UserStatus;
+import kr.co.javaex.sec23.domain.UserType;
 import kr.co.javaex.sec23.service.UserService;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class UserController {
     private UserService userService = new UserService();
     private ConsoleUtil consoleUtil = new ConsoleUtil();
-    // 로그인
 
     /**
      * 로그인
@@ -54,18 +51,6 @@ public class UserController {
             }
         }
 
-        // 아이디 중복 및 유효성 검사
-        String id;
-        while(true){
-            id = consoleUtil.readString("ID 입력 (5~15자리): ");
-            if(userService.isPossibleID(id)){
-                System.out.println("사용 가능한 ID 입니다.");
-                break;
-            } else {
-                System.out.println("사용 불가능한 ID 입니다.");
-            }
-        }
-
         // 비밀번호 정규식 검사
         String pw;
         while(true){
@@ -78,7 +63,7 @@ public class UserController {
             }
         }
 
-        User newUser = new User(id, name, pw, phone, email, UserStatus.ENABLE, UserAuth.USER);
+        User newUser = new User(null, name, pw, phone, email, true, UserType.USER);
 
         if (userService.registerUser(newUser)) {
             System.out.println("\n회원가입이 완료되었습니다! 로그인 해주세요.");
@@ -106,7 +91,11 @@ public class UserController {
                 System.out.println("사용 불가능한 이메일 입니다.");
             }
         }
-        userService.updateProfile(user.getUserID(), name, phone, email);
+        userService.updateProfile(user.getUserId(), name, phone, email);
+
+        user.setUserName(name);
+        user.setUserPhone(phone);
+        user.setUserEmail(email);
     }
 
     /**
@@ -123,20 +112,20 @@ public class UserController {
             return;
         }
 
-        // 새 비밀번호 입력 및 유효성 검사
+        // 비밀번호 입력
         String newPw;
-        while (true) {
+        while(true){
             newPw = consoleUtil.readString("새 비밀번호 입력 (영소/대문자, 숫자 포함 5~15자리): ");
-            if (userService.isPossiblePw(newPw)) {
+            if(userService.isPossiblePw(newPw)){
                 break;
             } else {
                 System.out.println("사용 불가능한 비밀번호 입니다.");
             }
         }
 
-        userService.updatePassword(currentUser.getUserID(), newPw);
+        userService.updatePassword(currentUser.getUserId(), newPw);
         System.out.println("비밀번호가 성공적으로 변경되었습니다.");
-        currentUser.setUserPW(newPw);
+        currentUser.setUserPw(newPw);
     }
 
     /**
@@ -159,12 +148,12 @@ public class UserController {
         // 유저 정보 출력
         for (User u : users) {
             System.out.printf("%s\t| %s\t| %s\t| %s\t| %s\t| %s\n",
-                    u.getUserID(),
+                    u.getUserId(),
                     u.getUserName(),
                     u.getUserEmail(),
-                    u.getUserPhoneNumber(),
-                    u.getUserStatus(),
-                    u.getUserAuth());
+                    u.getUserPhone(),
+                    u.getAble() ? "활성" : "정지",
+                    u.getUserType());
         }
         System.out.println("==================================================================================================================");
     }
