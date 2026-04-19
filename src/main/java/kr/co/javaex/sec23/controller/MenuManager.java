@@ -1,7 +1,7 @@
 package kr.co.javaex.sec23.controller;
 
 import kr.co.javaex.sec23.domain.User;
-import kr.co.javaex.sec23.domain.UserAuth;
+import kr.co.javaex.sec23.domain.UserType;
 import kr.co.javaex.sec23.util.ConsoleUtil;
 
 public class MenuManager {
@@ -28,7 +28,7 @@ public class MenuManager {
             // 권한에 따른 메뉴 출력
             if (currentUser == null) {
                 showGuestMenu();
-            } else if (currentUser.getUserAuth() == UserAuth.ADMIN) {
+            } else if (currentUser.getUserType() == UserType.ADMIN) {
                 showAdminMenu();
             } else {
                 showUserMenu();
