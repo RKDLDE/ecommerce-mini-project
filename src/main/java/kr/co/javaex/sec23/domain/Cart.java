@@ -1,60 +1,30 @@
 package kr.co.javaex.sec23.domain;
 
 public class Cart {
-    private Long cartID;            // 장바구니 ID
-    private String userID;          // 사용자 ID
-    private Long productID;         // 상품 ID
-    private int quantity;           // 재고수량
-    private boolean isChecked;      // 선택 여부
+    private Long cartId;            // 장바구니 ID
+    private Long userId;            // 사용자 ID
 
     public Cart() {
     }
 
-    public Cart(Long cartID, String userID, Long productID, int quantity, boolean isChecked) {
-        this.cartID = cartID;
-        this.userID = userID;
-        this.productID = productID;
-        this.quantity = quantity;
-        this.isChecked = isChecked;
+    public Cart(Long cartId, Long userId) {
+        this.cartId = cartId;
+        this.userId = userId;
     }
 
-    public Long getCartID() {
-        return cartID;
+    public Long getCartId() {
+        return cartId;
     }
 
-    public void setCartID(Long cartID) {
-        this.cartID = cartID;
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
     }
 
-    public String getUserID() {
-        return userID;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public Long getProductID() {
-        return productID;
-    }
-
-    public void setProductID(Long productID) {
-        this.productID = productID;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

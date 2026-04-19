@@ -1,35 +1,27 @@
 package kr.co.javaex.sec23.domain;
 
 public class Category {
-    private Long categoryID;        // 카테고리ID
-    private Long topCategoryID;     // 상위 카테고리 ID
+    private Long categoryId;        // 카테고리ID
     private String categoryName;    // 카테고리명
-    private int sortOrder;          // 정렬순번?
+    private Long categorySort;      // 정렬순번?
+    private Long categoryTopId;     // 상위 카테고리 ID
 
     public Category() {
     }
 
-    public Category(Long categoryID, Long topCategoryID, String categoryName, int sortOrder) {
-        this.categoryID = categoryID;
-        this.topCategoryID = topCategoryID;
+    public Category(Long categoryId, String categoryName, Long categorySort, Long categoryTopId) {
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.sortOrder = sortOrder;
+        this.categorySort = categorySort;
+        this.categoryTopId = categoryTopId;
     }
 
-    public Long getCategoryID() {
-        return categoryID;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategoryID(Long categoryID) {
-        this.categoryID = categoryID;
-    }
-
-    public Long getTopCategoryID() {
-        return topCategoryID;
-    }
-
-    public void setTopCategoryID(Long topCategoryID) {
-        this.topCategoryID = topCategoryID;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
@@ -40,11 +32,19 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public int getSortOrder() {
-        return sortOrder;
+    public Long getCategorySort() {
+        return categorySort;
     }
 
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
+    public void setCategorySort(Long categorySort) {
+        this.categorySort = categorySort;
+    }
+
+    public Long getCategoryTopId() {
+        return categoryTopId;
+    }
+
+    public void setCategoryTopId(Long categoryTopId) {
+        this.categoryTopId = categoryTopId;
     }
 }

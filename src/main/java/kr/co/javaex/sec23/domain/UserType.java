@@ -1,5 +1,5 @@
 package kr.co.javaex.sec23.domain;
 
-public enum UserAuth {
+public enum UserType {
     USER, ADMIN;
 }

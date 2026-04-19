@@ -1,41 +1,35 @@
 package kr.co.javaex.sec23.domain;
 
+import java.math.BigDecimal;
+
 public class Product {
-    private Long categoryID;                // 카테고리 ID
-    private Long productID;                 // 상품 ID
+    private Long productId;                 // 상품 ID
     private String productName;             // 상품명
-    private String productDescription;      // 상세 설명
-    private int productPrice;               // 가격
-    private int productStock;               // 재고수량
-    private ProductStatus productStatus;    // 상태(정상, 판매중지)
+    private String productDesc;             // 상세 설명
+    private BigDecimal productPrice;        // 가격
+    private Long productStock;              // 재고수량
+    private Boolean isActive;               // 상태(정상, 판매중지)
+    private Long categoryId;                // 카테고리 ID
 
     public Product() {
     }
 
-    public Product(Long categoryID, Long productID, String productName, String productDescription, int productPrice, int productStock, ProductStatus productStatus) {
-        this.categoryID = categoryID;
-        this.productID = productID;
+    public Product(Long productId, String productName, String productDesc, BigDecimal productPrice, Long productStock, Boolean isActive, Long categoryId) {
+        this.productId = productId;
         this.productName = productName;
-        this.productDescription = productDescription;
+        this.productDesc = productDesc;
         this.productPrice = productPrice;
         this.productStock = productStock;
-        this.productStatus = productStatus;
+        this.isActive = isActive;
+        this.categoryId = categoryId;
     }
 
-    public Long getCategoryID() {
-        return categoryID;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setCategoryID(Long categoryID) {
-        this.categoryID = categoryID;
-    }
-
-    public Long getProductID() {
-        return productID;
-    }
-
-    public void setProductID(Long productID) {
-        this.productID = productID;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -46,35 +40,43 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getProductDescription() {
-        return productDescription;
+    public String getProductDesc() {
+        return productDesc;
     }
 
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
+    public void setProductDesc(String productDesc) {
+        this.productDesc = productDesc;
     }
 
-    public int getProductPrice() {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(int productPrice) {
+    public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
     }
 
-    public int getProductStock() {
+    public Long getProductStock() {
         return productStock;
     }
 
-    public void setProductStock(int productStock) {
+    public void setProductStock(Long productStock) {
         this.productStock = productStock;
     }
 
-    public ProductStatus getProductStatus() {
-        return productStatus;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setProductStatus(ProductStatus productStatus) {
-        this.productStatus = productStatus;
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

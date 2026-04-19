@@ -1,34 +1,33 @@
 package kr.co.javaex.sec23.domain;
 
 public class User {
-    private String userID;          // ID
+    private Long userId;            // ID
     private String userName;        // 회원명
-    private String userPW;          // 비밀번호
-    private String userPhoneNumber; // 휴대전화
+    private String userPhone;       // 휴대전화
     private String userEmail;       // 이메일
-    private UserStatus userStatus;  // 상태
-    private UserAuth userAuth;      // 회원구분
-
+    private String userPw;          // 비밀번호
+    private Boolean isAble;         // 상태
+    private UserType userType;      // 회원구분
 
     public User() {
     }
 
-    public User(String userID, String userName, String userPW, String userPhoneNumber, String userEmail, UserStatus userStatus, UserAuth userAuth) {
-        this.userID = userID;
+    public User(Long userId, String userName, String userPhone, String userEmail, String userPw, Boolean isAble, UserType userType) {
+        this.userId = userId;
         this.userName = userName;
-        this.userPW = userPW;
-        this.userPhoneNumber = userPhoneNumber;
+        this.userPhone = userPhone;
         this.userEmail = userEmail;
-        this.userStatus = userStatus;
-        this.userAuth = userAuth;
+        this.userPw = userPw;
+        this.isAble = isAble;
+        this.userType = userType;
     }
 
-    public String getUserID() {
-        return userID;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -39,20 +38,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserPW() {
-        return userPW;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public void setUserPW(String userPW) {
-        this.userPW = userPW;
-    }
-
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
-    }
-
-    public void setUserPhoneNumber(String userPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
     public String getUserEmail() {
@@ -63,19 +54,27 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public UserStatus getUserStatus() {
-        return userStatus;
+    public String getUserPw() {
+        return userPw;
     }
 
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
+    public void setUserPw(String userPw) {
+        this.userPw = userPw;
     }
 
-    public UserAuth getUserAuth() {
-        return userAuth;
+    public Boolean getAble() {
+        return isAble;
     }
 
-    public void setUserAuth(UserAuth userAuth) {
-        this.userAuth = userAuth;
+    public void setAble(Boolean able) {
+        isAble = able;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }
