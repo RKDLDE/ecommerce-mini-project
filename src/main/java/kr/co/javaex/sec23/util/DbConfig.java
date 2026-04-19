@@ -35,7 +35,7 @@ public class DbConfig {
                 String password = props.getProperty("db.password");
 
                 connection = DriverManager.getConnection(url, user, password);
-                System.out.println("DB 연결");
+//                System.out.println("DB 연결");
             }
         } catch (SQLException e){
             throw new RuntimeException("DB 연결 실패", e);
