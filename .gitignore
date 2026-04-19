@@ -11,6 +11,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+# DB 설정 파일 제외
+src/main/resources/db.properties
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -166,5 +168,6 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,gradle
