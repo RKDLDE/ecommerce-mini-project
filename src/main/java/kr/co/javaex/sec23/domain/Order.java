@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Order {
-    private Long orderId;          // 주문 번호
-    private BigDecimal orderTotalPay;      // 총 금액
-    private LocalDateTime orderDate;      // 결제 시각
-    private Long userId;         // 주문한 사람 ID
+    private Long orderId;              // 주문 번호
+    private BigDecimal orderTotalPay;  // 총 금액
+    private LocalDateTime orderDate;   // 결제 시각
+    private Long userId;               // 주문한 사람 ID
 
     public Order() {
     }
